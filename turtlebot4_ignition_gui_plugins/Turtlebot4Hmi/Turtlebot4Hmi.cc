@@ -32,7 +32,6 @@ Turtlebot4Hmi::Turtlebot4Hmi()
 : Plugin()
 {
   App()->Engine()->rootContext()->setContextProperty("DisplayListView", &this->display_list_);
-  App()->Engine()->rootContext()->setContextProperty("led1", &this->led1_);
   this->hmi_button_pub_ = ignition::transport::Node::Publisher();
   this->hmi_button_pub_ = this->node_.Advertise < ignition::msgs::Int32 > (this->hmi_button_topic_);
   this->create3_button_pub_ = ignition::transport::Node::Publisher();

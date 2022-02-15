@@ -96,7 +96,6 @@ private:
   std::string user2_led_topic_ = "/model/turtlebot4/hmi/led/user2";
 
   QStringListModel display_list_;
-  QObject led1_;
 
   const unsigned int num_lines_{6u};
   const unsigned int char_per_line_{18u};
