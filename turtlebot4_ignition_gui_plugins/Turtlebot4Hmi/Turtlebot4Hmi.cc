@@ -16,57 +16,56 @@
  * @author Roni Kreinin (rkreinin@clearpathrobotics.com)
  */
 
-#include <iostream>
-#include <ignition/plugin/Register.hh>
-
 #include "Turtlebot4Hmi.hh"
-
-#include <ignition/plugin/Register.hh>
-
-#include <ignition/gui/Application.hh>
-#include <ignition/gui/MainWindow.hh>
 
 #include <ignition/msgs/int32.pb.h>
 
-using namespace ignition;
-using namespace gui;
+#include <ignition/plugin/Register.hh>
+#include <ignition/gui/Application.hh>
+#include <ignition/gui/MainWindow.hh>
+
+#include <iostream>
+
+using ignition::gui::Turtlebot4Hmi;
 
 Turtlebot4Hmi::Turtlebot4Hmi()
-    : Plugin()
+: Plugin()
 {
   App()->Engine()->rootContext()->setContextProperty("DisplayListView", &this->display_list_);
   App()->Engine()->rootContext()->setContextProperty("led1", &this->led1_);
   this->hmi_button_pub_ = ignition::transport::Node::Publisher();
-  this->hmi_button_pub_ = this->node_.Advertise<ignition::msgs::Int32>(this->hmi_button_topic_);
+  this->hmi_button_pub_ = this->node_.Advertise < ignition::msgs::Int32 > (this->hmi_button_topic_);
   this->create3_button_pub_ = ignition::transport::Node::Publisher();
-  this->create3_button_pub_ = this->node_.Advertise<ignition::msgs::Int32>(this->create3_button_topic_);
-  this->node_.Subscribe(this->display_topic_,           &Turtlebot4Hmi::OnRawMessage, this);
-  this->node_.Subscribe(this->display_selected_topic_,  &Turtlebot4Hmi::OnSelectedMessage, this);
-  this->node_.Subscribe(this->power_led_topic_,         &Turtlebot4Hmi::OnPowerLedMessage, this);
-  this->node_.Subscribe(this->motors_led_topic_,        &Turtlebot4Hmi::OnMotorsLedMessage, this);
-  this->node_.Subscribe(this->comms_led_topic_,         &Turtlebot4Hmi::OnCommsLedMessage, this);
-  this->node_.Subscribe(this->wifi_led_topic_,          &Turtlebot4Hmi::OnWifiLedMessage, this);
-  this->node_.Subscribe(this->battery_led_topic_,       &Turtlebot4Hmi::OnBatteryLedMessage, this);
-  this->node_.Subscribe(this->user1_led_topic_,         &Turtlebot4Hmi::OnUser1LedMessage, this);
-  this->node_.Subscribe(this->user2_led_topic_,         &Turtlebot4Hmi::OnUser2LedMessage, this);
+  this->create3_button_pub_ = this->node_.Advertise < ignition::msgs::Int32 > (
+    this->create3_button_topic_);
+  this->node_.Subscribe(this->display_topic_, &Turtlebot4Hmi::OnRawMessage, this);
+  this->node_.Subscribe(this->display_selected_topic_, &Turtlebot4Hmi::OnSelectedMessage, this);
+  this->node_.Subscribe(this->power_led_topic_, &Turtlebot4Hmi::OnPowerLedMessage, this);
+  this->node_.Subscribe(this->motors_led_topic_, &Turtlebot4Hmi::OnMotorsLedMessage, this);
+  this->node_.Subscribe(this->comms_led_topic_, &Turtlebot4Hmi::OnCommsLedMessage, this);
+  this->node_.Subscribe(this->wifi_led_topic_, &Turtlebot4Hmi::OnWifiLedMessage, this);
+  this->node_.Subscribe(this->battery_led_topic_, &Turtlebot4Hmi::OnBatteryLedMessage, this);
+  this->node_.Subscribe(this->user1_led_topic_, &Turtlebot4Hmi::OnUser1LedMessage, this);
+  this->node_.Subscribe(this->user2_led_topic_, &Turtlebot4Hmi::OnUser2LedMessage, this);
 }
 
 Turtlebot4Hmi::~Turtlebot4Hmi()
 {
 }
 
-void Turtlebot4Hmi::LoadConfig(const tinyxml2::XMLElement *_pluginElem)
+void Turtlebot4Hmi::LoadConfig(const tinyxml2::XMLElement * _pluginElem)
 {
-  if (!_pluginElem)
+  if (!_pluginElem) {
     return;
+  }
 
-  if (this->title.empty())
-  {
+  if (this->title.empty()) {
     this->title = "Turtlebot4 HMI";
   }
 
-  this->connect(this, SIGNAL(AddMsg(QString)), this, SLOT(OnAddMsg(QString)),
-                Qt::QueuedConnection);
+  this->connect(
+    this, SIGNAL(AddMsg(QString)), this, SLOT(OnAddMsg(QString)),
+    Qt::QueuedConnection);
 }
 
 void Turtlebot4Hmi::OnHmiButton(const int button)
@@ -75,9 +74,10 @@ void Turtlebot4Hmi::OnHmiButton(const int button)
 
   button_msg.set_data(button);
 
-  if (!this->hmi_button_pub_.Publish(button_msg))
-    ignerr << "ignition::msgs::Int32 message couldn't be published at topic: "
-           << this->hmi_button_topic_ << std::endl;
+  if (!this->hmi_button_pub_.Publish(button_msg)) {
+    ignerr << "ignition::msgs::Int32 message couldn't be published at topic: " <<
+      this->hmi_button_topic_ << std::endl;
+  }
 }
 
 void Turtlebot4Hmi::OnCreate3Button(const int button)
@@ -86,193 +86,182 @@ void Turtlebot4Hmi::OnCreate3Button(const int button)
 
   button_msg.set_data(button);
 
-  if (!this->create3_button_pub_.Publish(button_msg))
-    ignerr << "ignition::msgs::Int32 message couldn't be published at topic: "
-           << this->create3_button_topic_ << std::endl;
+  if (!this->create3_button_pub_.Publish(button_msg)) {
+    ignerr << "ignition::msgs::Int32 message couldn't be published at topic: " <<
+      this->create3_button_topic_ << std::endl;
+  }
 }
 
-void Turtlebot4Hmi::OnRawMessage(const ignition::msgs::StringMsg &msg)
+void Turtlebot4Hmi::OnRawMessage(const ignition::msgs::StringMsg & msg)
 {
-  std::lock_guard<std::mutex> lock(this->raw_msg_mutex_);
+  std::lock_guard < std::mutex > lock(this->raw_msg_mutex_);
   this->AddMsg(QString::fromStdString(msg.data()));
 }
 
-void Turtlebot4Hmi::OnSelectedMessage(const ignition::msgs::Int32 &msg)
+void Turtlebot4Hmi::OnSelectedMessage(const ignition::msgs::Int32 & msg)
 {
-  std::lock_guard<std::mutex> lock(this->selected_msg_mutex_);
+  std::lock_guard < std::mutex > lock(this->selected_msg_mutex_);
   selected_line_ = msg.data();
 }
 
-void Turtlebot4Hmi::OnPowerLedMessage(const ignition::msgs::Int32 &msg)
+void Turtlebot4Hmi::OnPowerLedMessage(const ignition::msgs::Int32 & msg)
 {
-
-  switch(msg.data())
-  {
+  switch (msg.data()) {
     case 0:
-    {
-      emit setPowerState(false, "green");
-      break;
-    }
+      {
+        emit setPowerState(false, "green");
+        break;
+      }
 
     case 1:
-    {
-      emit setPowerState(true, "green");
-      break;
-    }
+      {
+        emit setPowerState(true, "green");
+        break;
+      }
 
     default:
       break;
   }
 }
 
-void Turtlebot4Hmi::OnMotorsLedMessage(const ignition::msgs::Int32 &msg)
+void Turtlebot4Hmi::OnMotorsLedMessage(const ignition::msgs::Int32 & msg)
 {
-
-  switch(msg.data())
-  {
+  switch (msg.data()) {
     case 0:
-    {
-      emit setMotorsState(false, "green");
-      break;
-    }
+      {
+        emit setMotorsState(false, "green");
+        break;
+      }
 
     case 1:
-    {
-      emit setMotorsState(true, "green");
-      break;
-    }
+      {
+        emit setMotorsState(true, "green");
+        break;
+      }
 
     default:
       break;
   }
 }
 
-void Turtlebot4Hmi::OnCommsLedMessage(const ignition::msgs::Int32 &msg)
+void Turtlebot4Hmi::OnCommsLedMessage(const ignition::msgs::Int32 & msg)
 {
-
-  switch(msg.data())
-  {
+  switch (msg.data()) {
     case 0:
-    {
-      emit setCommsState(false, "green");
-      break;
-    }
+      {
+        emit setCommsState(false, "green");
+        break;
+      }
 
     case 1:
-    {
-      emit setCommsState(true, "green");
-      break;
-    }
+      {
+        emit setCommsState(true, "green");
+        break;
+      }
 
     default:
       break;
   }
 }
 
-void Turtlebot4Hmi::OnWifiLedMessage(const ignition::msgs::Int32 &msg)
+void Turtlebot4Hmi::OnWifiLedMessage(const ignition::msgs::Int32 & msg)
 {
-
-  switch(msg.data())
-  {
+  switch (msg.data()) {
     case 0:
-    {
-      emit setWifiState(false, "green");
-      break;
-    }
+      {
+        emit setWifiState(false, "green");
+        break;
+      }
 
     case 1:
-    {
-      emit setWifiState(true, "green");
-      break;
-    }
+      {
+        emit setWifiState(true, "green");
+        break;
+      }
 
     default:
       break;
   }
 }
 
-void Turtlebot4Hmi::OnBatteryLedMessage(const ignition::msgs::Int32 &msg)
+void Turtlebot4Hmi::OnBatteryLedMessage(const ignition::msgs::Int32 & msg)
 {
-  switch(msg.data())
-  {
+  switch (msg.data()) {
     case 0:
-    {
-      emit setBatteryState(false, "green");
-      break;
-    }
+      {
+        emit setBatteryState(false, "green");
+        break;
+      }
 
     case 1:
-    {
-      emit setBatteryState(true, "green");
-      break;
-    }
+      {
+        emit setBatteryState(true, "green");
+        break;
+      }
 
     case 2:
-    {
-      emit setBatteryState(true, "red");
-      break;
-    }
+      {
+        emit setBatteryState(true, "red");
+        break;
+      }
 
     case 3:
-    {
-      emit setBatteryState(true, "yellow");
-      break;
-    }
+      {
+        emit setBatteryState(true, "yellow");
+        break;
+      }
 
     default:
       break;
   }
 }
 
-void Turtlebot4Hmi::OnUser1LedMessage(const ignition::msgs::Int32 &msg)
+void Turtlebot4Hmi::OnUser1LedMessage(const ignition::msgs::Int32 & msg)
 {
-
-  switch(msg.data())
-  {
+  switch (msg.data()) {
     case 0:
-    {
-      emit setUser1State(false, "green");
-      break;
-    }
+      {
+        emit setUser1State(false, "green");
+        break;
+      }
 
     case 1:
-    {
-      emit setUser1State(true, "green");
-      break;
-    }
+      {
+        emit setUser1State(true, "green");
+        break;
+      }
 
     default:
       break;
   }
 }
 
-void Turtlebot4Hmi::OnUser2LedMessage(const ignition::msgs::Int32 &msg)
+void Turtlebot4Hmi::OnUser2LedMessage(const ignition::msgs::Int32 & msg)
 {
-  switch(msg.data())
-  {
+  switch (msg.data()) {
     case 0:
-    {
-      emit setUser2State(false, "green");
-      break;
-    }
+      {
+        emit setUser2State(false, "green");
+        break;
+      }
 
     case 1:
-    {
-      emit setUser2State(true, "green");
-      break;
-    }
+      {
+        emit setUser2State(true, "green");
+        break;
+      }
 
     case 2:
-    {
-      emit setUser2State(true, "red");
-      break;
-    }
+      {
+        emit setUser2State(true, "red");
+        break;
+      }
 
     case 3:
-    {
-      emit setUser2State(true, "yellow");
-      break;
-    }
+      {
+        emit setUser2State(true, "yellow");
+        break;
+      }
 
     default:
       break;
@@ -281,44 +270,35 @@ void Turtlebot4Hmi::OnUser2LedMessage(const ignition::msgs::Int32 &msg)
 
 void Turtlebot4Hmi::OnAddMsg(QString msg)
 {
-  std::lock_guard<std::mutex> lock(this->raw_msg_mutex_);
+  std::lock_guard < std::mutex > lock(this->raw_msg_mutex_);
 
   std::string data = msg.toStdString();
-  std::string lines[num_lines_];
+  std::vector<std::string> lines(num_lines_);
 
   // Header
   lines[0] = " " + data.substr(0, char_per_line_header_);
   data = data.substr(char_per_line_header_, data.length());
 
-  for (int i = 0; i < num_lines_ - 1; i++)
-  {
-    if (data.length() < char_per_line_ * i)
-    {
+  for (uint32_t i = 0; i < num_lines_ - 1; i++) {
+    if (data.length() < char_per_line_ * i) {
       lines[i + 1] = "";
-    }
-    else if (data.length() < char_per_line_ * (i + 1))
-    {
+    } else if (data.length() < char_per_line_ * (i + 1)) {
       lines[i + 1] = data.substr(char_per_line_ * i, data.length() - (char_per_line_ * i));
-    }
-    else
-    {
+    } else {
       lines[i + 1] = data.substr(char_per_line_ * i, char_per_line_);
     }
     lines[i + 1].insert(lines[i + 1].begin(), ' ');
   }
 
   {
-    std::lock_guard<std::mutex> lock(this->selected_msg_mutex_);
-    if (selected_line_ >= 0)
-    {
+    std::lock_guard < std::mutex > lock(this->selected_msg_mutex_);
+    if (selected_line_ >= 0) {
       lines[selected_line_ + 1].replace(0, 1, ">");
     }
   }
 
-  for (int i = 0; i < num_lines_; i++)
-  {
-    if (this->display_list_.insertRow(this->display_list_.rowCount()))
-    {
+  for (uint32_t i = 0; i < num_lines_; i++) {
+    if (this->display_list_.insertRow(this->display_list_.rowCount())) {
       auto index = this->display_list_.index(this->display_list_.rowCount() - 1, 0);
       this->display_list_.setData(index, QString::fromStdString(lines[i]));
     }
@@ -329,5 +309,6 @@ void Turtlebot4Hmi::OnAddMsg(QString msg)
 }
 
 // Register this plugin
-IGNITION_ADD_PLUGIN(ignition::gui::Turtlebot4Hmi,
-                    ignition::gui::Plugin)
+IGNITION_ADD_PLUGIN(
+  ignition::gui::Turtlebot4Hmi,
+  ignition::gui::Plugin)

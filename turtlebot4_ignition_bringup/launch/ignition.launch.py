@@ -11,20 +11,23 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-# 
+#
 # @author Roni Kreinin (rkreinin@clearpathrobotics.com)
 
 import os
 from pathlib import Path
+
 from ament_index_python.packages import get_package_share_directory
 
 from launch import LaunchContext, LaunchDescription, SomeSubstitutionsType, Substitution
 from launch.actions import DeclareLaunchArgument
 from launch.actions import IncludeLaunchDescription, SetEnvironmentVariable
 from launch.conditions import IfCondition, LaunchConfigurationEquals
-from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 from launch.launch_description_sources import PythonLaunchDescriptionSource
+from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
+
 from launch_ros.actions import Node
+
 
 class OffsetParser(Substitution):
     def __init__(
@@ -41,6 +44,7 @@ class OffsetParser(Substitution):
     ) -> str:
         number = float(self.__number.perform(context))
         return f'{number + self.__offset}'
+
 
 ARGUMENTS = [
     DeclareLaunchArgument('rviz', default_value='false',
@@ -74,30 +78,45 @@ ARGUMENTS = [
 def generate_launch_description():
 
     # Directories
-    pkg_turtlebot4_ignition_bringup = get_package_share_directory('turtlebot4_ignition_bringup')
-    pkg_turtlebot4_ignition_gui_plugins = get_package_share_directory('turtlebot4_ignition_gui_plugins')
-    pkg_turtlebot4_bringup = get_package_share_directory('turtlebot4_bringup')
-    pkg_turtlebot4_description = get_package_share_directory('turtlebot4_description')
-    pkg_turtlebot4_navigation = get_package_share_directory('turtlebot4_navigation')
-    pkg_turtlebot4_viz = get_package_share_directory('turtlebot4_viz')
+    pkg_turtlebot4_ignition_bringup = get_package_share_directory(
+        'turtlebot4_ignition_bringup')
+    pkg_turtlebot4_ignition_gui_plugins = get_package_share_directory(
+        'turtlebot4_ignition_gui_plugins')
+    pkg_turtlebot4_bringup = get_package_share_directory(
+        'turtlebot4_bringup')
+    pkg_turtlebot4_description = get_package_share_directory(
+        'turtlebot4_description')
+    pkg_turtlebot4_navigation = get_package_share_directory(
+        'turtlebot4_navigation')
+    pkg_turtlebot4_viz = get_package_share_directory(
+        'turtlebot4_viz')
 
-    pkg_irobot_create_common_bringup = get_package_share_directory('irobot_create_common_bringup')
-    pkg_irobot_create_description = get_package_share_directory('irobot_create_description')
-    pkg_irobot_create_ignition_bringup = get_package_share_directory('irobot_create_ignition_bringup')
-    pkg_irobot_create_ignition_plugins = get_package_share_directory('irobot_create_ignition_plugins')
-    
-    pkg_ros_ign_gazebo = get_package_share_directory('ros_ign_gazebo')
+    pkg_irobot_create_common_bringup = get_package_share_directory(
+        'irobot_create_common_bringup')
+    pkg_irobot_create_description = get_package_share_directory(
+        'irobot_create_description')
+    pkg_irobot_create_ignition_bringup = get_package_share_directory(
+        'irobot_create_ignition_bringup')
+    pkg_irobot_create_ignition_plugins = get_package_share_directory(
+        'irobot_create_ignition_plugins')
+
+    pkg_ros_ign_gazebo = get_package_share_directory(
+        'ros_ign_gazebo')
 
     # Set ignition resource path
-    ign_resource_path = SetEnvironmentVariable(name='IGN_GAZEBO_RESOURCE_PATH', value=[
-                                                os.path.join(pkg_turtlebot4_ignition_bringup, 'worlds'), ':' + 
-                                                os.path.join(pkg_irobot_create_ignition_bringup, 'worlds'), ':' + 
-                                                str(Path(pkg_turtlebot4_description).parent.resolve()), ':' + 
-                                                str(Path(pkg_irobot_create_description).parent.resolve())])
+    ign_resource_path = SetEnvironmentVariable(
+        name='IGN_GAZEBO_RESOURCE_PATH',
+        value=[
+            os.path.join(pkg_turtlebot4_ignition_bringup, 'worlds'), ':' +
+            os.path.join(pkg_irobot_create_ignition_bringup, 'worlds'), ':' +
+            str(Path(pkg_turtlebot4_description).parent.resolve()), ':' +
+            str(Path(pkg_irobot_create_description).parent.resolve())])
 
-    ign_gui_plugin_path = SetEnvironmentVariable(name='IGN_GUI_PLUGIN_PATH', value=[
-                                                os.path.join(pkg_turtlebot4_ignition_gui_plugins, 'lib'), ':' +
-                                                os.path.join(pkg_irobot_create_ignition_plugins, 'lib')])
+    ign_gui_plugin_path = SetEnvironmentVariable(
+        name='IGN_GUI_PLUGIN_PATH',
+        value=[
+            os.path.join(pkg_turtlebot4_ignition_gui_plugins, 'lib'), ':' +
+            os.path.join(pkg_irobot_create_ignition_plugins, 'lib')])
 
     # Paths
     ign_gazebo_launch = PathJoinSubstitution(
@@ -129,11 +148,14 @@ def generate_launch_description():
     ignition_gazebo = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([ign_gazebo_launch]),
         launch_arguments=[
-                ('ign_args', [LaunchConfiguration('world'), '.sdf',
-                              ' -v 4',
-                              ' --gui-config ', 
-                              PathJoinSubstitution([pkg_turtlebot4_ignition_bringup, 'gui', LaunchConfiguration('model'), 'gui.config'])]
-            )
+            ('ign_args', [
+                LaunchConfiguration('world'), '.sdf',
+                ' -v 4',
+                ' --gui-config ', PathJoinSubstitution(
+                    [pkg_turtlebot4_ignition_bringup,
+                     'gui',
+                     LaunchConfiguration('model'),
+                     'gui.config'])])
         ]
     )
 
@@ -149,28 +171,34 @@ def generate_launch_description():
     yaw_dock = OffsetParser(yaw, 3.1416)
     dock_description = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([dock_description_launch]),
-        launch_arguments={'gazebo' : 'ignition'}.items()
+        launch_arguments={'gazebo': 'ignition'}.items()
     )
 
     # Spawn Turtlebot4
-    spawn_robot = Node(package='ros_ign_gazebo', executable='create',
-			arguments=['-name', LaunchConfiguration('robot_name'),
-				'-x', x,
-                '-y', y,
-				'-z', z,
-				'-Y', yaw,
-                '-topic', 'robot_description'],
-			output='screen')
+    spawn_robot = Node(
+        package='ros_ign_gazebo',
+        executable='create',
+        arguments=[
+            '-name', LaunchConfiguration('robot_name'),
+            '-x', x,
+            '-y', y,
+            '-z', z,
+            '-Y', yaw,
+            '-topic', 'robot_description'],
+        output='screen')
 
     # Spawn dock
-    spawn_dock = Node(package='ros_ign_gazebo', executable='create',
-                      arguments=['-name', 'standard_dock',
-                                 '-x', x_dock,
-                                 '-y', y,
-                                 '-z', z,
-                                 '-Y', yaw_dock,
-                                 '-topic', 'standard_dock_description'],
-                      output='screen')
+    spawn_dock = Node(
+        package='ros_ign_gazebo',
+        executable='create',
+        arguments=[
+            '-name', 'standard_dock',
+            '-x', x_dock,
+            '-y', y,
+            '-z', z,
+            '-Y', yaw_dock,
+            '-topic', 'standard_dock_description'],
+        output='screen')
 
     # ROS Ign bridge
     turtlebot4_ros_ign_bridge = IncludeLaunchDescription(
@@ -219,7 +247,9 @@ def generate_launch_description():
             package='tf2_ros',
             executable='static_transform_publisher',
             output='screen',
-            arguments=['0', '0', '0', '0', '0.0', '0.0', 'rplidar_link', [LaunchConfiguration('robot_name'), '/rplidar_link/rplidar']]
+            arguments=[
+                '0', '0', '0', '0', '0.0', '0.0',
+                'rplidar_link', [LaunchConfiguration('robot_name'), '/rplidar_link/rplidar']]
         )
 
     # OAKD static transforms
@@ -228,7 +258,10 @@ def generate_launch_description():
             package='tf2_ros',
             executable='static_transform_publisher',
             output='screen',
-            arguments=['0', '0', '0', '0', '0', '0', 'oakd_pro_link', [LaunchConfiguration('robot_name'), '/oakd_pro_link/rgbd_camera']],
+            arguments=[
+                '0', '0', '0', '0', '0', '0',
+                'oakd_pro_link', [LaunchConfiguration('robot_name'), '/oakd_pro_link/rgbd_camera']
+            ],
             condition=LaunchConfigurationEquals('model', 'standard')
         )
 
@@ -237,10 +270,12 @@ def generate_launch_description():
             package='tf2_ros',
             executable='static_transform_publisher',
             output='screen',
-            arguments=['0', '0', '0', '0', '0', '0', 'oakd_pro_link', [LaunchConfiguration('robot_name'), '/oakd_pro_link/rgbd_camera']],
+            arguments=[
+                '0', '0', '0', '0', '0', '0',
+                'oakd_pro_link', [LaunchConfiguration('robot_name'), '/oakd_pro_link/rgbd_camera']
+            ],
             condition=LaunchConfigurationEquals('model', 'lite')
         )
-
 
     # Define LaunchDescription variable
     ld = LaunchDescription(ARGUMENTS)
