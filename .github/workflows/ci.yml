@@ -1,0 +1,21 @@
+name: turtlebot4_simulator_ci
+
+on: [push, pull_request]
+
+jobs:
+  turtlebot4_galactic_ci:
+    name: Galactic
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2.3.4
+      - uses: ros-tooling/setup-ros@0.2.1
+        with:
+          required-ros-distributions: galactic
+      - uses: ros-tooling/action-ros-ci@0.2.1
+        id: action_ros_ci_step
+        with:
+          target-ros2-distro: galactic
+          import-token: ${{ secrets.GITHUB_TOKEN }}
+          package-name:
+            turtlebot4_ignition_bringup
+            turtlebot4_ignition_gui_plugins
