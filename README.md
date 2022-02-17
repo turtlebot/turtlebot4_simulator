@@ -4,9 +4,27 @@ Turtlebot4 Simulation using Ignition Gazebo.
 
 ## Prerequisites
 
+### ROS2 Galactic
+
+Install from [debian](https://docs.ros.org/en/galactic/Installation/Ubuntu-Install-Debians.html).
+
+### ROS2 Dev Tools
+
+```bash
+sudo apt install -y \
+python3-colcon-common-extensions \
+python3-rosdep \
+python3-vcstool
+```
+
 ### Ignition Edifice
 
-Follow the [Create3 Instructions](https://github.com/iRobotEducation/create3_sim/blob/main/README.md#prerequisites) to install Ignition Edifice. Installing from source is recommended.
+```bash
+sudo apt-get update && sudo apt-get install wget
+sudo sh -c 'echo "deb http://packages.osrfoundation.org/gazebo/ubuntu-stable `lsb_release -cs` main" > /etc/apt/sources.list.d/gazebo-stable.list'
+wget http://packages.osrfoundation.org/gazebo.key -O - | sudo apt-key add -
+sudo apt-get update && sudo apt-get install ignition-edifice
+```
 
 ## Build
 
@@ -20,21 +38,13 @@ mkdir -p ~/turtlebot4_ws/src
 
 ```bash
 cd ~/turtlebot4_ws/src
-git clone git@github.com:turtlebot/turtlebot4_sim.git
+git clone https://github.com/turtlebot/turtlebot4_simulator.git
 ```
 
 - Use `vcs` to clone additional dependencies into the workspace:
 
 ```bash
-vcs import ~/turtlebot4_ws/src/ < ~/turtlebot4_ws/src/turtlebot4_sim/dependencies.repos
-```
-
-- Clone turtlebot4 packages:
-
-```bash
-cd ~/turtlebot4_ws/src
-git clone git@github.com:turtlebot/turtlebot4.git
-git clone git@github.com:turtlebot/turtlebot4_desktop.git
+vcs import ~/turtlebot4_ws/src/ < ~/turtlebot4_ws/src/turtlebot4_simulator/dependencies.repos
 ```
 
 - Navigate to the workspace and install ROS 2 dependencies with:
@@ -48,17 +58,6 @@ rosdep install --from-path src -yi
 
 ```bash
 source /opt/ros/galactic/setup.bash
-```
-
-- If Ignition is installed from source, source the Ignition workspace:
-
-```bash
-source ~/ignition_ws/install/setup.bash
-```
-
-- Then:
-
-```bash
 colcon build --symlink-install
 source install/local_setup.bash
 ```
@@ -78,8 +77,8 @@ source install/local_setup.bash
 
 `ros2 launch turtlebot4_ignition_bringup ignition.launch.py world:=maze.sdf`
 
-## SLAM w/ LIDAR
-`ros2 launch turtlebot4_ignition_bringup ignition.launch.py slam:=lidar rviz:=true`
+## SLAM
+`ros2 launch turtlebot4_ignition_bringup ignition.launch.py slam:=true rviz:=true`
 
 ## Nav2
 
