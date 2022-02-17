@@ -55,7 +55,17 @@ void Hmi::display_subscriber_callback(const turtlebot4_msgs::msg::UserDisplay::S
   auto selected_msg = std::make_unique<std_msgs::msg::Int32>();
   selected_msg->data = msg->selected_entry;
 
-  raw_msg->data = msg->header_info;
+  std::string header = msg->ip + " " + msg->battery + "%";
+
+  if (header.length() < DISPLAY_CHAR_PER_LINE_HEADER) {
+    // Pad string
+    header.insert(header.length(), DISPLAY_CHAR_PER_LINE_HEADER - header.length(), ' ');
+  } else if (header.length() > DISPLAY_CHAR_PER_LINE_HEADER) {
+    // Remove excess characters
+    header = header.substr(0, DISPLAY_CHAR_PER_LINE_HEADER);
+  }
+
+  raw_msg->data = header;
 
   for (size_t i = 0; i < msg->entries.size(); i++) {
     raw_msg->data += msg->entries[i];
