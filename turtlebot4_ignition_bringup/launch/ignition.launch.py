@@ -56,9 +56,6 @@ ARGUMENTS = [
     DeclareLaunchArgument('nav2', default_value='false',
                           choices=['true', 'false'],
                           description='Run nav2'),
-    DeclareLaunchArgument('node', default_value='true',
-                          choices=['true', 'false'],
-                          description='Run turtlebot4 node'),
     DeclareLaunchArgument('use_sim_time', default_value='true',
                           choices=['true', 'false'],
                           description='use_sim_time'),
@@ -130,7 +127,7 @@ def generate_launch_description():
     nav2_launch = PathJoinSubstitution(
         [pkg_turtlebot4_navigation, 'launch', 'nav2.launch.py'])
     node_launch = PathJoinSubstitution(
-        [pkg_turtlebot4_bringup, 'launch', 'robot.launch.py'])
+        [pkg_turtlebot4_ignition_bringup, 'launch', 'turtlebot4_nodes.launch.py'])
     create3_nodes_launch = PathJoinSubstitution(
         [pkg_irobot_create_common_bringup, 'launch', 'create3_nodes.launch.py'])
     create3_ignition_nodes_launch = PathJoinSubstitution(
@@ -226,9 +223,7 @@ def generate_launch_description():
 
     turtlebot4_node = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([node_launch]),
-        launch_arguments=[('use_sim', LaunchConfiguration('use_sim')),
-                          ('model', LaunchConfiguration('model'))],
-        condition=IfCondition(LaunchConfiguration('node')),
+        launch_arguments=[('model', LaunchConfiguration('model'))]
     )
 
     # Create3 nodes
