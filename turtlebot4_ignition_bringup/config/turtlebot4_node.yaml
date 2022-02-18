@@ -1,7 +1,7 @@
 turtlebot4_node:
   ros__parameters:
     wifi:
-      interface: "wlp0s20f3"
+      interface: "wlan0"
       
       # Supported Functions:
       # Dock
@@ -30,9 +30,9 @@ turtlebot4_node:
       # button: ["SHORT_PRESS_FUNC", "LONG_PRESS_FUNC", "LONG_PRESS_DURATION_MS"]
 
     buttons:  
-      create3_1: ["Dock", "", ""]
+      create3_1: ["Dock", "Wall Follow Left", "2000"]
       create3_power: ["EStop", "Power", "3000"]
-      create3_2: ["Undock", "", ""]
+      create3_2: ["Undock", "Wall Follow Right", "2000"]
 
       hmi_1: ["Select", "", ""]
       hmi_2: ["Back", "", ""]
@@ -41,5 +41,4 @@ turtlebot4_node:
 
       # Menu entry must match a function
     menu:
-      entries: ["Dock", "Undock", "Power", "EStop", "Follow", "Help"]
-
+      entries: ["Dock", "Undock", "EStop", "Wall Follow Left", "Wall Follow Right", "Power", "Help"]
