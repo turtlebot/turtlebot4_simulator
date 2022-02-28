@@ -79,8 +79,6 @@ def generate_launch_description():
         'turtlebot4_ignition_bringup')
     pkg_turtlebot4_ignition_gui_plugins = get_package_share_directory(
         'turtlebot4_ignition_gui_plugins')
-    pkg_turtlebot4_bringup = get_package_share_directory(
-        'turtlebot4_bringup')
     pkg_turtlebot4_description = get_package_share_directory(
         'turtlebot4_description')
     pkg_turtlebot4_navigation = get_package_share_directory(
