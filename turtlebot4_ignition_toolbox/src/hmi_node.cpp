@@ -18,6 +18,7 @@
 
 #include <string>
 #include <utility>
+#include <memory>
 
 #include "turtlebot4_ignition_toolbox/hmi_node.hpp"
 

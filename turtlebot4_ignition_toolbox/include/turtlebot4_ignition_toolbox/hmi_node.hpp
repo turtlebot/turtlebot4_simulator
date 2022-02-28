@@ -16,8 +16,8 @@
  * @author Roni Kreinin (rkreinin@clearpathrobotics.com)
  */
 
-#ifndef TURTLEBOT4_IGNITION_TOOLBOX__HMI_HPP_
-#define TURTLEBOT4_IGNITION_TOOLBOX__HMI_HPP_
+#ifndef TURTLEBOT4_IGNITION_TOOLBOX__HMI_NODE_HPP_
+#define TURTLEBOT4_IGNITION_TOOLBOX__HMI_NODE_HPP_
 
 #include <rclcpp/rclcpp.hpp>
 #include <string>
@@ -29,7 +29,7 @@
 
 namespace turtlebot4_ignition_toolbox
 {
-  
+
 #define DISPLAY_CHAR_PER_LINE_HEADER 21
 
 class Hmi : public rclcpp::Node
@@ -40,7 +40,7 @@ public:
 private:
   void display_subscriber_callback(const turtlebot4_msgs::msg::UserDisplay::SharedPtr msg);
   void button_subscriber_callback(const std_msgs::msg::Int32::SharedPtr msg);
-  
+
   // Publishers
   rclcpp::Publisher<turtlebot4_msgs::msg::UserButton>::SharedPtr button_publisher_;
   rclcpp::Publisher<std_msgs::msg::String>::SharedPtr display_raw_publisher_;
@@ -53,4 +53,4 @@ private:
 
 }  // namespace turtlebot4_ignition_toolbox
 
-#endif  // TURTLEBOT4_IGNITION_TOOLBOX__HMI_HPP_
+#endif  // TURTLEBOT4_IGNITION_TOOLBOX__HMI_NODE_HPP_
