@@ -50,18 +50,18 @@ ARGUMENTS = [
     DeclareLaunchArgument('rviz', default_value='false',
                           choices=['true', 'false'],
                           description='Start rviz.'),
-    DeclareLaunchArgument('slam', default_value='false',
+    DeclareLaunchArgument('slam', default_value='off',
+                          choices=['off', 'sync', 'async'],
+                          description='Whether to run a SLAM'),
+    DeclareLaunchArgument('localization', default_value='false',
                           choices=['true', 'false'],
-                          description='Run slam toolbox'),
+                          description='Whether to run localization'),
     DeclareLaunchArgument('nav2', default_value='false',
                           choices=['true', 'false'],
                           description='Run nav2'),
     DeclareLaunchArgument('use_sim_time', default_value='true',
                           choices=['true', 'false'],
                           description='use_sim_time'),
-    DeclareLaunchArgument('use_sim', default_value='true',
-                          choices=['true', 'false'],
-                          description='use_sim'),
     DeclareLaunchArgument('world', default_value='depot',
                           description='Ignition World'),
     DeclareLaunchArgument('model', default_value='standard',
@@ -118,12 +118,10 @@ def generate_launch_description():
         [pkg_ros_ign_gazebo, 'launch', 'ign_gazebo.launch.py'])
     turtlebot4_ros_ign_bridge_launch = PathJoinSubstitution(
         [pkg_turtlebot4_ignition_bringup, 'launch', 'ros_ign_bridge.launch.py'])
-    slam_launch = PathJoinSubstitution(
-        [pkg_turtlebot4_navigation, 'launch', 'slam_sync.launch.py'])
     rviz_launch = PathJoinSubstitution(
         [pkg_turtlebot4_viz, 'launch', 'view_robot.launch.py'])
-    nav2_launch = PathJoinSubstitution(
-        [pkg_turtlebot4_navigation, 'launch', 'nav2.launch.py'])
+    nav_launch = PathJoinSubstitution(
+        [pkg_turtlebot4_navigation, 'launch', 'nav_bringup.launch.py'])
     node_launch = PathJoinSubstitution(
         [pkg_turtlebot4_ignition_bringup, 'launch', 'turtlebot4_nodes.launch.py'])
     create3_nodes_launch = PathJoinSubstitution(
@@ -140,8 +138,13 @@ def generate_launch_description():
         'param_file',
         default_value=PathJoinSubstitution(
             [pkg_turtlebot4_ignition_bringup, 'config', 'turtlebot4_node.yaml']),
-        description='Turtlebot4 Robot param file'
-    )
+        description='Turtlebot4 Robot param file')
+
+    declare_map_yaml_cmd = DeclareLaunchArgument(
+        'map',
+        default_value=PathJoinSubstitution(
+            [pkg_turtlebot4_navigation, 'maps', 'depot.yaml']),
+        description='Full path to map yaml file to load')
 
     # Launch configurations
     x, y, z = LaunchConfiguration('x'), LaunchConfiguration('y'), LaunchConfiguration('z')
@@ -210,22 +213,20 @@ def generate_launch_description():
         launch_arguments=[('model', LaunchConfiguration('model'))]
     )
 
-    # SLAM toolbox
-    slam_toolbox = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([slam_launch]),
-        condition=IfCondition(LaunchConfiguration('slam')),
-    )
-
     # Rviz2
     rviz2 = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([rviz_launch]),
         condition=IfCondition(LaunchConfiguration('rviz')),
     )
 
-    # Nav2
-    nav2 = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([nav2_launch]),
-        condition=IfCondition(LaunchConfiguration('nav2')),
+    # Navigation
+    navigation = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([nav_launch]),
+        launch_arguments=[('slam', LaunchConfiguration('slam')),
+                          ('nav2', LaunchConfiguration('nav2')),
+                          ('localization', LaunchConfiguration('localization')),
+                          ('use_sim_time', LaunchConfiguration('use_sim_time')),
+                          ('map', LaunchConfiguration('map'))]
     )
 
     turtlebot4_node = IncludeLaunchDescription(
@@ -285,6 +286,7 @@ def generate_launch_description():
     ld.add_action(ign_resource_path)
     ld.add_action(ign_gui_plugin_path)
     ld.add_action(param_file_cmd)
+    ld.add_action(declare_map_yaml_cmd)
     ld.add_action(ignition_gazebo)
     ld.add_action(turtlebot4_ros_ign_bridge)
     ld.add_action(rviz2)
@@ -295,8 +297,7 @@ def generate_launch_description():
     ld.add_action(create3_nodes)
     ld.add_action(create3_ignition_nodes)
     ld.add_action(turtlebot4_node)
-    ld.add_action(slam_toolbox)
-    ld.add_action(nav2)
+    ld.add_action(navigation)
     ld.add_action(rplidar_stf)
     ld.add_action(oakd_pro_stf)
     ld.add_action(oakd_lite_stf)
