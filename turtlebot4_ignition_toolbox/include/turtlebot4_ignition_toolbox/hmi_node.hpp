@@ -29,7 +29,7 @@
 
 namespace turtlebot4_ignition_toolbox
 {
-  
+
 static constexpr auto DISPLAY_CHAR_PER_LINE_HEADER = 21;
 
 class Hmi : public rclcpp::Node
