@@ -135,9 +135,18 @@ def generate_launch_description():
     dock_description_launch = PathJoinSubstitution(
         [pkg_irobot_create_common_bringup, 'launch', 'dock_description.launch.py'])
 
+    # Parameters
+    param_file_cmd = DeclareLaunchArgument(
+        'param_file',
+        default_value=PathJoinSubstitution(
+            [pkg_turtlebot4_ignition_bringup, 'config', 'turtlebot4_node.yaml']),
+        description='Turtlebot4 Robot param file'
+    )
+
     # Launch configurations
     x, y, z = LaunchConfiguration('x'), LaunchConfiguration('y'), LaunchConfiguration('z')
     yaw = LaunchConfiguration('yaw')
+    turtlebot4_node_yaml_file = LaunchConfiguration('param_file')
 
     # Ignition gazebo
     ignition_gazebo = IncludeLaunchDescription(
@@ -221,7 +230,8 @@ def generate_launch_description():
 
     turtlebot4_node = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([node_launch]),
-        launch_arguments=[('model', LaunchConfiguration('model'))]
+        launch_arguments=[('model', LaunchConfiguration('model')),
+                          ('param_file', turtlebot4_node_yaml_file)]
     )
 
     # Create3 nodes
@@ -274,6 +284,7 @@ def generate_launch_description():
     ld = LaunchDescription(ARGUMENTS)
     ld.add_action(ign_resource_path)
     ld.add_action(ign_gui_plugin_path)
+    ld.add_action(param_file_cmd)
     ld.add_action(ignition_gazebo)
     ld.add_action(turtlebot4_ros_ign_bridge)
     ld.add_action(rviz2)
