@@ -14,7 +14,6 @@
   <depend>turtlebot4_msgs</depend>
   <depend>turtlebot4_navigation</depend>
   <depend>turtlebot4_viz</depend>
-  <depend>turtlebot4_bringup</depend>
   <depend>turtlebot4_ignition_gui_plugins</depend>
 
   <!-- Create3 -->
