@@ -13,8 +13,10 @@
   <depend>turtlebot4_description</depend>
   <depend>turtlebot4_msgs</depend>
   <depend>turtlebot4_navigation</depend>
+  <depend>turtlebot4_node</depend>
   <depend>turtlebot4_viz</depend>
   <depend>turtlebot4_ignition_gui_plugins</depend>
+  <depend>turtlebot4_ignition_toolbox</depend>
 
   <!-- Create3 -->
   <depend>irobot_create_description</depend>
