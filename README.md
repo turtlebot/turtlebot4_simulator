@@ -58,6 +58,7 @@ rosdep install --from-path src -yi
 
 ```bash
 source /opt/ros/galactic/setup.bash
+export IGNITION_VERSION=edifice
 colcon build --symlink-install
 source install/local_setup.bash
 ```
