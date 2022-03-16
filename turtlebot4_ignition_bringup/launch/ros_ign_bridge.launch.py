@@ -187,22 +187,22 @@ def generate_launch_description():
               '/model/',
               LaunchConfiguration('robot_name'),
               '/link/oakd_pro_link/sensor/rgbd_camera/image'],
-             '/camera/color'),
+             '/color/image'),
             (['/world/', LaunchConfiguration('world'),
               '/model/',
               LaunchConfiguration('robot_name'),
               '/link/oakd_pro_link/sensor/rgbd_camera/depth_image'],
-             '/camera/depth'),
+             '/stereo/depth'),
             (['/world/', LaunchConfiguration('world'),
               '/model/',
               LaunchConfiguration('robot_name'),
               '/link/oakd_pro_link/sensor/rgbd_camera/points'],
-             '/camera/depth/points'),
+             '/stereo/depth/points'),
             (['/world/', LaunchConfiguration('world'),
               '/model/',
               LaunchConfiguration('robot_name'),
               '/link/oakd_pro_link/sensor/rgbd_camera/camera_info'],
-             '/camera/camera_info')
+             '/color/camera_info')
                 ],
         condition=LaunchConfigurationEquals('model', 'standard'))
 
@@ -239,19 +239,19 @@ def generate_launch_description():
             (['/world/', LaunchConfiguration('world'),
               '/model/', LaunchConfiguration('robot_name'),
               '/link/oakd_pro_link/sensor/rgbd_camera/image'],
-             '/camera/color'),
+             '/color/image'),
             (['/world/', LaunchConfiguration('world'),
               '/model/', LaunchConfiguration('robot_name'),
               '/link/oakd_pro_link/sensor/rgbd_camera/depth_image'],
-             '/camera/depth'),
+             '/stereo/depth'),
             (['/world/', LaunchConfiguration('world'),
               '/model/', LaunchConfiguration('robot_name'),
               '/link/oakd_pro_link/sensor/rgbd_camera/points'],
-             '/camera/depth/points'),
+             '/stereo/depth/points'),
             (['/world/', LaunchConfiguration('world'),
               '/model/', LaunchConfiguration('robot_name'),
               '/link/oakd_pro_link/sensor/rgbd_camera/camera_info'],
-             '/camera/camera_info')
+             '/color/camera_info')
                 ],
         condition=LaunchConfigurationEquals('model', 'lite'))
 
