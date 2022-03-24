@@ -95,9 +95,6 @@ def generate_launch_description():
     pkg_irobot_create_ignition_plugins = get_package_share_directory(
         'irobot_create_ignition_plugins')
 
-    pkg_depthai_bridge = get_package_share_directory(
-        'depthai_bridge')
-
     pkg_ros_ign_gazebo = get_package_share_directory(
         'ros_ign_gazebo')
 
@@ -108,8 +105,7 @@ def generate_launch_description():
             os.path.join(pkg_turtlebot4_ignition_bringup, 'worlds'), ':' +
             os.path.join(pkg_irobot_create_ignition_bringup, 'worlds'), ':' +
             str(Path(pkg_turtlebot4_description).parent.resolve()), ':' +
-            str(Path(pkg_irobot_create_description).parent.resolve()), ':' +
-            str(Path(pkg_depthai_bridge).parent.resolve())])
+            str(Path(pkg_irobot_create_description).parent.resolve())])
 
     ign_gui_plugin_path = SetEnvironmentVariable(
         name='IGN_GUI_PLUGIN_PATH',
