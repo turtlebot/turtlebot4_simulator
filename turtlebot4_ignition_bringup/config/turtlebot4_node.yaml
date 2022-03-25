@@ -6,7 +6,8 @@ turtlebot4_node:
       # Supported Functions:
       # Dock
       # Undock
-      # Follow
+      # Wall Follow Left
+      # Wall Follow Right
       # Power
       # EStop
 
@@ -34,22 +35,21 @@ turtlebot4_node:
       create3_power: ["EStop", "Power", "3000"]
       create3_2: ["Undock", "Wall Follow Right", "2000"]
 
-      hmi_1: ["Select", "", ""]
-      hmi_2: ["Back", "", ""]
-      hmi_3: ["Scroll Up", "", ""]
-      hmi_4: ["Scroll Down", "", ""]
+      hmi_1: ["Select"]
+      hmi_2: ["Back"]
+      hmi_3: ["Scroll Up"]
+      hmi_4: ["Scroll Down"]
 
       # Menu entry must match a function
     menu:
       entries: ["Dock", "Undock", "EStop", "Wall Follow Left", "Wall Follow Right", "Power", "Help"]
 
-     # Controller button functions
-
-      # Buttons:
-      # a b x y
-      # up down left right
-      # l1 l2 l3 r1 r2 r3
-      # share options home
+    # Controller button functions
+    # Buttons:
+    # a b x y
+    # up down left right
+    # l1 l2 l3 r1 r2 r3
+    # share options home
 
     controller:
       b: ["EStop"]

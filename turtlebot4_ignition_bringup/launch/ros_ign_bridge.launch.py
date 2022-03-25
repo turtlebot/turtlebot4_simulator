@@ -163,22 +163,22 @@ def generate_launch_description():
         arguments=[
             ['/world/', LaunchConfiguration('world'),
                 '/model/', LaunchConfiguration('robot_name'),
-                '/link/oakd_pro_link/sensor/rgbd_camera/image' +
+                '/link/oakd_pro_rgb_camera_frame/sensor/rgbd_camera/image' +
                 '@sensor_msgs/msg/Image' +
                 '[ignition.msgs.Image'],
             ['/world/', LaunchConfiguration('world'),
                 '/model/', LaunchConfiguration('robot_name'),
-                '/link/oakd_pro_link/sensor/rgbd_camera/depth_image' +
+                '/link/oakd_pro_rgb_camera_frame/sensor/rgbd_camera/depth_image' +
                 '@sensor_msgs/msg/Image' +
                 '[ignition.msgs.Image'],
             ['/world/', LaunchConfiguration('world'),
                 '/model/', LaunchConfiguration('robot_name'),
-                '/link/oakd_pro_link/sensor/rgbd_camera/points' +
+                '/link/oakd_pro_rgb_camera_frame/sensor/rgbd_camera/points' +
                 '@sensor_msgs/msg/PointCloud2' +
                 '[ignition.msgs.PointCloudPacked'],
             ['/world/', LaunchConfiguration('world'),
                 '/model/', LaunchConfiguration('robot_name'),
-                '/link/oakd_pro_link/sensor/rgbd_camera/camera_info' +
+                '/link/oakd_pro_rgb_camera_frame/sensor/rgbd_camera/camera_info' +
                 '@sensor_msgs/msg/CameraInfo' +
                 '[ignition.msgs.CameraInfo'],
                 ],
@@ -186,23 +186,23 @@ def generate_launch_description():
             (['/world/', LaunchConfiguration('world'),
               '/model/',
               LaunchConfiguration('robot_name'),
-              '/link/oakd_pro_link/sensor/rgbd_camera/image'],
-             '/camera/color'),
+              '/link/oakd_pro_rgb_camera_frame/sensor/rgbd_camera/image'],
+             '/color/image'),
             (['/world/', LaunchConfiguration('world'),
               '/model/',
               LaunchConfiguration('robot_name'),
-              '/link/oakd_pro_link/sensor/rgbd_camera/depth_image'],
-             '/camera/depth'),
+              '/link/oakd_pro_rgb_camera_frame/sensor/rgbd_camera/depth_image'],
+             '/stereo/depth'),
             (['/world/', LaunchConfiguration('world'),
               '/model/',
               LaunchConfiguration('robot_name'),
-              '/link/oakd_pro_link/sensor/rgbd_camera/points'],
-             '/camera/depth/points'),
+              '/link/oakd_pro_rgb_camera_frame/sensor/rgbd_camera/points'],
+             '/stereo/depth/points'),
             (['/world/', LaunchConfiguration('world'),
               '/model/',
               LaunchConfiguration('robot_name'),
-              '/link/oakd_pro_link/sensor/rgbd_camera/camera_info'],
-             '/camera/camera_info')
+              '/link/oakd_pro_rgb_camera_frame/sensor/rgbd_camera/camera_info'],
+             '/color/camera_info')
                 ],
         condition=LaunchConfigurationEquals('model', 'standard'))
 
@@ -216,42 +216,42 @@ def generate_launch_description():
         arguments=[
             ['/world/', LaunchConfiguration('world'),
              '/model/', LaunchConfiguration('robot_name'),
-             '/link/oakd_pro_link/sensor/rgbd_camera/image' +
+             '/link/oakd_lite_rgb_camera_frame/sensor/rgbd_camera/image' +
              '@sensor_msgs/msg/Image' +
              '[ignition.msgs.Image'],
             ['/world/', LaunchConfiguration('world'),
              '/model/', LaunchConfiguration('robot_name'),
-             '/link/oakd_pro_link/sensor/rgbd_camera/depth_image' +
+             '/link/oakd_lite_rgb_camera_frame/sensor/rgbd_camera/depth_image' +
              '@sensor_msgs/msg/Image' +
              '[ignition.msgs.Image'],
             ['/world/', LaunchConfiguration('world'),
              '/model/', LaunchConfiguration('robot_name'),
-             '/link/oakd_pro_link/sensor/rgbd_camera/points' +
+             '/link/oakd_lite_rgb_camera_frame/sensor/rgbd_camera/points' +
              '@sensor_msgs/msg/PointCloud2' +
              '[ignition.msgs.PointCloudPacked'],
             ['/world/', LaunchConfiguration('world'),
              '/model/', LaunchConfiguration('robot_name'),
-             '/link/oakd_pro_link/sensor/rgbd_camera/camera_info' +
+             '/link/oakd_lite_rgb_camera_frame/sensor/rgbd_camera/camera_info' +
              '@sensor_msgs/msg/CameraInfo' +
              '[ignition.msgs.CameraInfo'],
                 ],
         remappings=[
             (['/world/', LaunchConfiguration('world'),
               '/model/', LaunchConfiguration('robot_name'),
-              '/link/oakd_pro_link/sensor/rgbd_camera/image'],
-             '/camera/color'),
+              '/link/oakd_lite_rgb_camera_frame/sensor/rgbd_camera/image'],
+             '/color/image'),
             (['/world/', LaunchConfiguration('world'),
               '/model/', LaunchConfiguration('robot_name'),
-              '/link/oakd_pro_link/sensor/rgbd_camera/depth_image'],
-             '/camera/depth'),
+              '/link/oakd_lite_rgb_camera_frame/sensor/rgbd_camera/depth_image'],
+             '/stereo/depth'),
             (['/world/', LaunchConfiguration('world'),
               '/model/', LaunchConfiguration('robot_name'),
-              '/link/oakd_pro_link/sensor/rgbd_camera/points'],
-             '/camera/depth/points'),
+              '/link/oakd_lite_rgb_camera_frame/sensor/rgbd_camera/points'],
+             '/stereo/depth/points'),
             (['/world/', LaunchConfiguration('world'),
               '/model/', LaunchConfiguration('robot_name'),
-              '/link/oakd_pro_link/sensor/rgbd_camera/camera_info'],
-             '/camera/camera_info')
+              '/link/oakd_lite_rgb_camera_frame/sensor/rgbd_camera/camera_info'],
+             '/color/camera_info')
                 ],
         condition=LaunchConfigurationEquals('model', 'lite'))
 

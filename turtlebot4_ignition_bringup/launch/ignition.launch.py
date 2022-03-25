@@ -264,7 +264,8 @@ def generate_launch_description():
             output='screen',
             arguments=[
                 '0', '0', '0', '0', '0', '0',
-                'oakd_pro_link', [LaunchConfiguration('robot_name'), '/oakd_pro_link/rgbd_camera']
+                'oakd_pro_rgb_camera_optical_frame',
+                [LaunchConfiguration('robot_name'), '/oakd_pro_rgb_camera_frame/rgbd_camera']
             ],
             condition=LaunchConfigurationEquals('model', 'standard')
         )
@@ -276,7 +277,8 @@ def generate_launch_description():
             output='screen',
             arguments=[
                 '0', '0', '0', '0', '0', '0',
-                'oakd_pro_link', [LaunchConfiguration('robot_name'), '/oakd_pro_link/rgbd_camera']
+                'oakd_lite_rgb_camera_optical_frame',
+                [LaunchConfiguration('robot_name'), '/oakd_lite_rgb_camera_frame/rgbd_camera']
             ],
             condition=LaunchConfigurationEquals('model', 'lite')
         )
