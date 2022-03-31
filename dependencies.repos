@@ -2,7 +2,7 @@ repositories:
   irobot_create_msgs:
     type: git
     url: https://github.com/iRobotEducation/irobot_create_msgs.git
-    version: galactic
+    version: main
   create3_sim:
     type: git
     url: https://github.com/iRobotEducation/create3_sim.git
