@@ -29,14 +29,6 @@ sudo apt-get update && sudo apt-get install ignition-edifice
 **Note**: `ign_ros2_control` is released but not yet sync in the Galactic stable repository. Galactic sync
 happens perodically. Meanwhile you can try to use the testing repository:
 
-#### ROS2 Testing packages
-
-Change your ROS2 package source to `ros2-testing` to get the latest updates.
-
- - Edit `/etc/apt/sources.list.d/ros2.list`
- - Change `http://packages.ros.org/ros2/ubuntu focal main` to `http://packages.ros.org/ros2-testing/ubuntu focal main`
- - Run `sudo apt update`
-
 ## Build
 
 - Create a workspace if you don't already have one:
@@ -90,7 +82,7 @@ source install/local_setup.bash
 `ros2 launch turtlebot4_ignition_bringup ignition.launch.py world:=maze.sdf`
 
 ## SLAM
-`ros2 launch turtlebot4_ignition_bringup ignition.launch.py slam:=true rviz:=true`
+`ros2 launch turtlebot4_ignition_bringup ignition.launch.py slam:=sync rviz:=true`
 
 ## Nav2
 
