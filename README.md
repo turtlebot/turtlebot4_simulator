@@ -26,9 +26,6 @@ wget http://packages.osrfoundation.org/gazebo.key -O - | sudo apt-key add -
 sudo apt-get update && sudo apt-get install ignition-edifice
 ```
 
-**Note**: `ign_ros2_control` is released but not yet sync in the Galactic stable repository. Galactic sync
-happens perodically. Meanwhile you can try to use the testing repository:
-
 ## Build
 
 - Create a workspace if you don't already have one:
