@@ -3,7 +3,7 @@
 <package format="3">
   <name>turtlebot4_ignition_bringup</name>
   <version>0.1.0</version>
-  <description>TODO: Package description</description>
+  <description>TurtleBot 4 Ignition Simulator bringup</description>
   <maintainer email="rkreinin@clearpathrobotics.com">rkreinin</maintainer>
   <license>Apache 2.0</license>
 
@@ -21,6 +21,7 @@
   <!-- Create3 -->
   <depend>irobot_create_description</depend>
   <depend>irobot_create_common_bringup</depend>
+  <depend>irobot_create_nodes</depend>
   <depend>irobot_create_toolbox</depend>
   <depend>irobot_create_ignition_bringup</depend>
   <depend>irobot_create_ignition_toolbox</depend>
