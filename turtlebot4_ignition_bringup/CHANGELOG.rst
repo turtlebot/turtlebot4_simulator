@@ -2,8 +2,8 @@
 Changelog for package turtlebot4_ignition_bringup
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.1.1 (2022-05-09)
+------------------
 * Added irobot_create_nodes dependency
 * Contributors: Roni Kreinin
 
