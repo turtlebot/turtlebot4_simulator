@@ -42,7 +42,7 @@ turtlebot4_node:
 
       # Menu entry must match a function
     menu:
-      entries: ["Dock", "Undock", "My Program", "My Program 1", "My Program 2", "My Program 3", "EStop", "Wall Follow Left", "Wall Follow Right", "Power", "Help"]
+      entries: ["Dock", "Undock", "User Program 1", "User Program 2", "User Program 3", "User Program 4", "EStop", "Wall Follow Left", "Wall Follow Right", "Power", "Help"]
 
     # Controller button functions
     # Buttons:
