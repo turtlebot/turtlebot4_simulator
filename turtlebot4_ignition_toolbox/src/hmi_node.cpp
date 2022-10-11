@@ -28,25 +28,25 @@ Hmi::Hmi()
 : rclcpp::Node("hmi_node")
 {
   display_subscriber_ = create_subscription<turtlebot4_msgs::msg::UserDisplay>(
-    "/hmi/display",
+    "hmi/display",
     rclcpp::SensorDataQoS(),
     std::bind(&Hmi::display_subscriber_callback, this, std::placeholders::_1));
 
   button_subscriber_ = create_subscription<std_msgs::msg::Int32>(
-    "/hmi/buttons/_set",
+    "hmi/buttons/_set",
     rclcpp::QoS(rclcpp::KeepLast(10)),
     std::bind(&Hmi::button_subscriber_callback, this, std::placeholders::_1));
 
   button_publisher_ = create_publisher<turtlebot4_msgs::msg::UserButton>(
-    "/hmi/buttons",
+    "hmi/buttons",
     rclcpp::SensorDataQoS());
 
   display_raw_publisher_ = create_publisher<std_msgs::msg::String>(
-    "/hmi/display/_raw",
+    "hmi/display/_raw",
     rclcpp::QoS(rclcpp::KeepLast(10)));
 
   display_selected_publisher_ = create_publisher<std_msgs::msg::Int32>(
-    "/hmi/display/_selected",
+    "hmi/display/_selected",
     rclcpp::QoS(rclcpp::KeepLast(10)));
 }
 

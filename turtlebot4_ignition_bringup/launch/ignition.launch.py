@@ -68,7 +68,9 @@ ARGUMENTS = [
                           choices=['standard', 'lite'],
                           description='Turtlebot4 Model'),
     DeclareLaunchArgument('robot_name', default_value='turtlebot4',
-                          description='Robot name')
+                          description='Robot name'),
+    DeclareLaunchArgument('namespace', default_value='',
+                          description='robot namespace'),
 ]
 
 
@@ -150,6 +152,10 @@ def generate_launch_description():
     x, y, z = LaunchConfiguration('x'), LaunchConfiguration('y'), LaunchConfiguration('z')
     yaw = LaunchConfiguration('yaw')
     turtlebot4_node_yaml_file = LaunchConfiguration('param_file')
+    robot_name = LaunchConfiguration('robot_name')
+    namespace = LaunchConfiguration('namespace')
+    namespaced_robot_description = [namespace, '/robot_description']
+    namespaced_dock_description = [namespace, '/standard_dock_description']
 
     # Ignition gazebo
     ignition_gazebo = IncludeLaunchDescription(
@@ -167,18 +173,20 @@ def generate_launch_description():
     )
 
     # Robot description
-    robot_description = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([robot_description_launch]),
-        launch_arguments=[('model', LaunchConfiguration('model')),
-                          ('use_sim_time', LaunchConfiguration('use_sim_time'))]
-    )
+    robot_description_launch = IncludeLaunchDescription(
+            PythonLaunchDescriptionSource([robot_description_launch]),
+            launch_arguments={'gazebo': 'ignition', 'namespace': namespace}.items())
 
-    # Dock description
+    # Dock description     
     x_dock = OffsetParser(x, 0.157)
     yaw_dock = OffsetParser(yaw, 3.1416)
     dock_description = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([dock_description_launch]),
-        launch_arguments={'gazebo': 'ignition'}.items()
+        condition=IfCondition(LaunchConfiguration('spawn_dock')),
+        # The robot starts docked
+        launch_arguments={'x': x_dock, 'y': y, 'z': z, 'yaw': yaw_dock,
+                          'namespace': namespace,
+                          'gazebo': 'ignition'}.items()
     )
 
     # Spawn Turtlebot4
@@ -186,12 +194,12 @@ def generate_launch_description():
         package='ros_ign_gazebo',
         executable='create',
         arguments=[
-            '-name', LaunchConfiguration('robot_name'),
+            '-name', robot_name,
             '-x', x,
             '-y', y,
             '-z', z,
             '-Y', yaw,
-            '-topic', 'robot_description'],
+            '-topic', namespaced_robot_description],
         output='screen')
 
     # Spawn dock
@@ -199,18 +207,19 @@ def generate_launch_description():
         package='ros_ign_gazebo',
         executable='create',
         arguments=[
-            '-name', 'standard_dock',
+            '-name', (robot_name, '_standard_dock'),
             '-x', x_dock,
             '-y', y,
             '-z', z,
             '-Y', yaw_dock,
-            '-topic', 'standard_dock_description'],
+            '-topic', namespaced_dock_description],
         output='screen')
 
     # ROS Ign bridge
     turtlebot4_ros_ign_bridge = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([turtlebot4_ros_ign_bridge_launch]),
-        launch_arguments=[('model', LaunchConfiguration('model'))]
+        launch_arguments=[('model', LaunchConfiguration('model'),
+                          ('namespace', namespace))]
     )
 
     # Rviz2
@@ -226,23 +235,27 @@ def generate_launch_description():
                           ('nav2', LaunchConfiguration('nav2')),
                           ('localization', LaunchConfiguration('localization')),
                           ('use_sim_time', LaunchConfiguration('use_sim_time')),
-                          ('map', LaunchConfiguration('map'))]
+                          ('map', LaunchConfiguration('map')),
+                          ('namespace', namespace)]
     )
 
     turtlebot4_node = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([node_launch]),
         launch_arguments=[('model', LaunchConfiguration('model')),
-                          ('param_file', turtlebot4_node_yaml_file)]
+                          ('param_file', turtlebot4_node_yaml_file),
+                          ('namespace', namespace)]
     )
 
     # Create3 nodes
     create3_nodes = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([create3_nodes_launch])
+        PythonLaunchDescriptionSource([create3_nodes_launch]),
+        launch_arguments=[('namespace', namespace)]
     )
 
     create3_ignition_nodes = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([create3_ignition_nodes_launch]),
-        launch_arguments=[('robot_name', LaunchConfiguration('robot_name'))]
+        launch_arguments=[('robot_name', LaunchConfiguration('robot_name')),
+                          ('namespace', namespace)]
     )
 
     # RPLIDAR static transforms
