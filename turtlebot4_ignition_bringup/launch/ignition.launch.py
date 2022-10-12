@@ -305,7 +305,7 @@ def generate_launch_description():
     ld.add_action(ignition_gazebo)
     ld.add_action(turtlebot4_ros_ign_bridge)
     ld.add_action(rviz2)
-    ld.add_action(robot_description)
+    ld.add_action(robot_description_launch)
     ld.add_action(dock_description)
     ld.add_action(spawn_robot)
     ld.add_action(spawn_dock)

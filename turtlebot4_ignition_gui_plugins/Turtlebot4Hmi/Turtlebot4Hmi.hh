@@ -36,6 +36,14 @@ class Turtlebot4Hmi : public Plugin
 {
   Q_OBJECT
 
+  // \brief Namespace
+  Q_PROPERTY(
+    QString namespace
+    READ Namespace
+    WRITE SetNamespace
+    NOTIFY NamespaceChanged
+  )
+
 public:
   /// \brief Constructor
   Turtlebot4Hmi();
@@ -44,6 +52,20 @@ public:
   /// \brief Called by Ignition GUI when plugin is instantiated.
   /// \param[in] _pluginElem XML configuration for this plugin.
   void LoadConfig(const tinyxml2::XMLElement * _pluginElem) override;
+  // \brief Get the namespace as a string, for example
+  /// '/echo'
+  /// \return Namespace
+  Q_INVOKABLE QString Namespace() const;
+
+public slots: 
+  /// \brief Callback in Qt thread when the namespace changes.
+  /// \param[in] _namespace variable to indicate the namespace to
+  /// publish the Button commands and subscribe to robot status.
+  void SetNamespace(const QString &_namespace);
+
+signals:
+  /// \brief Notify that namespace has changed
+  void NamespaceChanged();
 
 protected slots:
   /// \brief Callback trigged when the button is pressed.
@@ -71,6 +93,7 @@ private:
   void OnBatteryLedMessage(const ignition::msgs::Int32 & msg);
   void OnUser1LedMessage(const ignition::msgs::Int32 & msg);
   void OnUser2LedMessage(const ignition::msgs::Int32 & msg);
+  void UpdateTopics();
 
 signals:
   void AddMsg(QString msg);
@@ -83,8 +106,9 @@ private:
   ignition::transport::Node::Publisher hmi_button_pub_;
   ignition::transport::Node::Publisher create3_button_pub_;
 
+  std::string namespace_ = "";
   std::string hmi_button_topic_ = "/model/turtlebot4/hmi/buttons";
-  std::string create3_button_topic_ = "/create3/buttons";
+  std::string create3_button_topic_ = "/buttons";
   std::string display_topic_ = "/model/turtlebot4/hmi/display/raw";
   std::string display_selected_topic_ = "/model/turtlebot4/hmi/display/selected";
   std::string power_led_topic_ = "/model/turtlebot4/hmi/led/power";

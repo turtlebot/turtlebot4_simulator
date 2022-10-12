@@ -24,7 +24,9 @@ from launch_ros.actions import Node
 ARGUMENTS = [
     DeclareLaunchArgument('model', default_value='standard',
                           choices=['standard', 'lite'],
-                          description='Turtlebot4 Model')
+                          description='Turtlebot4 Model'),
+    DeclareLaunchArgument('namespace', default_value='',
+                          description='robot namespace'),
 ]
 
 
@@ -42,11 +44,13 @@ def generate_launch_description():
     )
 
     turtlebot4_node_yaml_file = LaunchConfiguration('param_file')
+    namespace = LaunchConfiguration('namespace')
 
     # Turtlebot4 node
     turtlebot4_node = Node(
         package='turtlebot4_node',
         name='turtlebot4_node',
+        namespace=namespace,
         executable='turtlebot4_node',
         parameters=[turtlebot4_node_yaml_file,
                     {'model': LaunchConfiguration('model')}],
@@ -57,6 +61,7 @@ def generate_launch_description():
     turtlebot4_ignition_hmi_node = Node(
         package='turtlebot4_ignition_toolbox',
         name='turtlebot4_ignition_hmi_node',
+        namespace=namespace,
         executable='turtlebot4_ignition_hmi_node',
         output='screen',
         condition=LaunchConfigurationEquals('model', 'standard')

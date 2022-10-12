@@ -31,7 +31,35 @@ Rectangle
   anchors.fill: parent
   focus: true
   Layout.minimumWidth: 400
-  Layout.minimumHeight: 525
+  Layout.minimumHeight: 575
+
+  // Namespace input
+  Label {
+    id: namespaceLabel
+    text: "Namespace:"
+    Layout.fillWidth: true
+    Layout.margins: 10
+    anchors.top: widgetRectangle.top
+    anchors.topMargin: 10
+    anchors.left: widgetRectangle.left
+    anchors.leftMargin: 10
+  }
+
+  TextField {
+    id: namespaceField
+    width: 175
+    Layout.fillWidth: true
+    Layout.margins: 10
+    text: Turtlebot4Hmi.namespace
+    placeholderText: qsTr("Namespace to publish...")
+    anchors.top: namespaceLabel.bottom
+    anchors.topMargin: 5
+    anchors.left: widgetRectangle.left
+    anchors.leftMargin: 10
+    onEditingFinished: {
+      Turtlebot4Hmi.SetNamespace(text)
+    }
+  }
 
   Connections {
       target: Turtlebot4Hmi
