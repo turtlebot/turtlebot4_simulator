@@ -31,35 +31,7 @@ Rectangle
   anchors.fill: parent
   focus: true
   Layout.minimumWidth: 400
-  Layout.minimumHeight: 575
-
-  // Namespace input
-  Label {
-    id: namespaceLabel
-    text: "Namespace:"
-    Layout.fillWidth: true
-    Layout.margins: 10
-    anchors.top: widgetRectangle.top
-    anchors.topMargin: 10
-    anchors.left: widgetRectangle.left
-    anchors.leftMargin: 10
-  }
-
-  TextField {
-    id: namespaceField
-    width: 175
-    Layout.fillWidth: true
-    Layout.margins: 10
-    text: Turtlebot4Hmi.namespace
-    placeholderText: qsTr("Namespace to publish...")
-    anchors.top: namespaceLabel.bottom
-    anchors.topMargin: 5
-    anchors.left: widgetRectangle.left
-    anchors.leftMargin: 10
-    onEditingFinished: {
-      Turtlebot4Hmi.SetNamespace(text)
-    }
-  }
+  Layout.minimumHeight: 600
 
   Connections {
       target: Turtlebot4Hmi
@@ -103,20 +75,46 @@ Rectangle
   Rectangle
   {
     id: create3ButtonsRectangle
-    border.color: "black"
-    border.width: 2
-    anchors.top: widgetRectangle.top
+    anchors.top: namespaceRectangle.top
     anchors.left: widgetRectangle.left
     focus: true
-    height: 125
+    height: 200
     width: 400
+
+    // Namespace input
+    Label {
+      id: namespaceLabel
+      text: "Namespace:"
+      Layout.fillWidth: true
+      Layout.margins: 10
+      anchors.top: create3ButtonsRectangle.top
+      anchors.topMargin: 10
+      anchors.left: parent.left
+      anchors.leftMargin: 10
+    }
+
+    TextField {
+      id: namespaceField
+      width: 175
+      Layout.fillWidth: true
+      Layout.margins: 10
+      text: Turtlebot4Hmi.namespace
+      placeholderText: qsTr("insert namespace")
+      anchors.top: namespaceLabel.bottom
+      anchors.topMargin: 5
+      anchors.left: parent.left
+      anchors.leftMargin: 10
+      onEditingFinished: {
+        Turtlebot4Hmi.SetNamespace(text)
+      }
+    }
 
     // Buttons
     Label {
       id: create3ButtonsLabel
       text: "Create3"
       font.pixelSize: 22
-      anchors.top: create3ButtonsRectangle.top
+      anchors.top: namespaceField.bottom
       anchors.topMargin: 10
       anchors.left: parent.left
       anchors.leftMargin: 10
@@ -187,14 +185,12 @@ Rectangle
     height: 350
     width: 400
     color: "transparent"
-    border.color: "black"
-    border.width: 2
     anchors.top: create3ButtonsRectangle.bottom
     anchors.left: create3ButtonsRectangle.left
 
     Label {
       id: hmiLabel
-      text: "Turtlebot4 HMI"
+      text: "Turtlebot4"
       font.pixelSize: 22
       anchors.top: hmiRectangle.top
       anchors.topMargin: 10
