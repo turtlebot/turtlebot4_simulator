@@ -67,6 +67,9 @@ ARGUMENTS = [
     DeclareLaunchArgument('model', default_value='standard',
                           choices=['standard', 'lite'],
                           description='Turtlebot4 Model'),
+    DeclareLaunchArgument('spawn_dock', default_value='true',
+                          choices=['true', 'false'],
+                          description='Dock Model.'),
     DeclareLaunchArgument('robot_name', default_value='turtlebot4',
                           description='Robot name'),
     DeclareLaunchArgument('namespace', default_value='',
@@ -218,8 +221,8 @@ def generate_launch_description():
     # ROS Ign bridge
     turtlebot4_ros_ign_bridge = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([turtlebot4_ros_ign_bridge_launch]),
-        launch_arguments=[('model', LaunchConfiguration('model'),
-                          ('namespace', namespace))]
+        launch_arguments=[('model', LaunchConfiguration('model')),
+                          ('namespace', namespace)]
     )
 
     # Rviz2

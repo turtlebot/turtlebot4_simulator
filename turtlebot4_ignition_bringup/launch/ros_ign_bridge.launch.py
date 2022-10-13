@@ -18,9 +18,9 @@ from ament_index_python.packages import get_package_share_directory
 
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
-from launch.conditions import LaunchConfigurationEquals, LaunchConfigurationNotEquals
+from launch.conditions import LaunchConfigurationEquals, LaunchConfigurationNotEquals, IfCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.substitutions import LaunchConfiguration
+from launch.substitutions import LaunchConfiguration, PythonExpression
 from launch.substitutions.path_join_substitution import PathJoinSubstitution
 
 from launch_ros.actions import Node
@@ -53,6 +53,7 @@ def generate_launch_description():
     ]
 
     namespace = LaunchConfiguration('namespace')
+    model = LaunchConfiguration('model')
     use_sim_time = LaunchConfiguration('use_sim_time')
 
     pkg_irobot_create_ignition_bringup = get_package_share_directory(
@@ -119,7 +120,7 @@ def generate_launch_description():
 
     # Display message bridge
     hmi_display_msg_bridge = Node(
-        condition=LaunchConfigurationEquals('namespace', '') and LaunchConfigurationEquals('model', 'standard'),
+        condition=IfCondition(PythonExpression(["'", namespace, "' == '' and '", model, "' == 'standard'"])),
         package='ros_ign_bridge',
         executable='parameter_bridge',
         namespace=namespace,
@@ -142,7 +143,7 @@ def generate_launch_description():
         ])
 
     hmi_display_msg_bridge_namespaced = Node(
-        condition=LaunchConfigurationNotEquals('namespace', '') and LaunchConfigurationEquals('model', 'standard'),
+        condition=IfCondition(PythonExpression(["'", namespace, "' != '' and '", model, "' == 'standard'"])),
         package='ros_ign_bridge',
         executable='parameter_bridge',
         namespace=namespace,
@@ -166,7 +167,7 @@ def generate_launch_description():
 
     # Buttons message bridge
     hmi_buttons_msg_bridge = Node(
-        condition=LaunchConfigurationEquals('namespace', '') and LaunchConfigurationEquals('model', 'standard'),
+        condition=IfCondition(PythonExpression(["'", namespace, "' == '' and '", model, "' == 'standard'"])),
         package='ros_ign_bridge',
         executable='parameter_bridge',
         namespace=namespace,
@@ -184,7 +185,7 @@ def generate_launch_description():
         ])
 
     hmi_buttons_msg_bridge_namespaced = Node(
-        condition=LaunchConfigurationNotEquals('namespace', '') and LaunchConfigurationEquals('model', 'standard'),
+        condition=IfCondition(PythonExpression(["'", namespace, "' != '' and '", model, "' == 'standard'"])),
         package='ros_ign_bridge',
         executable='parameter_bridge',
         namespace=namespace,
@@ -203,7 +204,7 @@ def generate_launch_description():
 
     # Buttons message bridge
     hmi_led_msg_bridge = Node(
-        condition=LaunchConfigurationEquals('namespace', '') and LaunchConfigurationEquals('model', 'standard'),
+        condition=IfCondition(PythonExpression(["'", namespace, "' == '' and '", model, "' == 'standard'"])),
         package='ros_ign_bridge',
         executable='parameter_bridge',
         namespace=namespace,
@@ -221,7 +222,7 @@ def generate_launch_description():
         ])
 
     hmi_led_msg_bridge_namespaced = Node(
-        condition=LaunchConfigurationNotEquals('namespace', '') and LaunchConfigurationEquals('model', 'standard'),
+        condition=IfCondition(PythonExpression(["'", namespace, "' != '' and '", model, "' == 'standard'"])),
         package='ros_ign_bridge',
         executable='parameter_bridge',
         namespace=namespace,
@@ -240,7 +241,7 @@ def generate_launch_description():
 
     # Camera sensor bridge
     oakd_pro_camera_bridge = Node(
-        condition=LaunchConfigurationEquals('namespace', '') and LaunchConfigurationEquals('model', 'standard'),
+        condition=IfCondition(PythonExpression(["'", namespace, "' == '' and '", model, "' == 'standard'"])),
         package='ros_ign_bridge',
         executable='parameter_bridge',
         namespace=namespace,
@@ -293,7 +294,7 @@ def generate_launch_description():
         ])
     
     oakd_pro_camera_bridge_namespaced = Node(
-        condition=LaunchConfigurationNotEquals('namespace', '') and LaunchConfigurationEquals('model', 'standard'),
+        condition=IfCondition(PythonExpression(["'", namespace, "' != '' and '", model, "' == 'standard'"])),
         package='ros_ign_bridge',
         executable='parameter_bridge',
         namespace=namespace,
@@ -346,7 +347,7 @@ def generate_launch_description():
         ])
 
     oakd_lite_camera_bridge = Node(
-        condition=LaunchConfigurationEquals('namespace', '') and LaunchConfigurationEquals('model', 'lite'),
+        condition=IfCondition(PythonExpression(["'", namespace, "' == '' and '", model, "' == 'lite'"])),
         package='ros_ign_bridge',
         executable='parameter_bridge',
         namespace=namespace,
@@ -395,7 +396,7 @@ def generate_launch_description():
         ])
 
     oakd_lite_camera_bridge_namespaced = Node(
-        condition=LaunchConfigurationNotEquals('namespace', '') and LaunchConfigurationEquals('model', 'lite'),
+        condition=IfCondition(PythonExpression(["'", namespace, "' != '' and '", model, "' == 'lite'"])),
         package='ros_ign_bridge',
         executable='parameter_bridge',
         namespace=namespace,
