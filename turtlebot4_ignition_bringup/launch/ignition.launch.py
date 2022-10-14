@@ -218,7 +218,7 @@ def generate_launch_description():
             '-x', x_dock,
             '-y', y,
             '-z', z,
-            '-Y', yaw_dock,
+            '-Y', '3.141592',
             '-topic', namespaced_dock_description],
         output='screen')
 
@@ -226,6 +226,7 @@ def generate_launch_description():
     turtlebot4_ros_ign_bridge = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([turtlebot4_ros_ign_bridge_launch]),
         launch_arguments=[('model', LaunchConfiguration('model')),
+                          ('robot_name', robot_name),
                           ('namespace', namespace)]
     )
 

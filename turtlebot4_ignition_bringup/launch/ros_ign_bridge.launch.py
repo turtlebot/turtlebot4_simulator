@@ -53,6 +53,8 @@ def generate_launch_description():
     ]
 
     namespace = LaunchConfiguration('namespace')
+    robot_name = LaunchConfiguration('robot_name')
+    world = LaunchConfiguration('world')
     model = LaunchConfiguration('model')
     use_sim_time = LaunchConfiguration('use_sim_time')
 
@@ -65,9 +67,9 @@ def generate_launch_description():
     create3_bridge = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([create3_ros_ign_bridge_launch]),
         launch_arguments=[
-            ('robot_name', LaunchConfiguration('robot_name')),
-            ('world', LaunchConfiguration('world')),
-            ('namespace', LaunchConfiguration('namespace'))
+            ('robot_name', robot_name),
+            ('world', world),
+            ('namespace', namespace)
         ]
     )
 
@@ -83,14 +85,14 @@ def generate_launch_description():
             'use_sim_time': use_sim_time
         }],
         arguments=[
-            ['/world/', LaunchConfiguration('world'),
-             '/model/', LaunchConfiguration('robot_name'),
+            ['/world/', world,
+             '/model/', robot_name,
              '/link/rplidar_link/sensor/rplidar/scan' +
              '@sensor_msgs/msg/LaserScan[ignition.msgs.LaserScan']
         ],
         remappings=[
-            (['/world/', LaunchConfiguration('world'),
-              '/model/', LaunchConfiguration('robot_name'),
+            (['/world/', world,
+              '/model/', robot_name,
               '/link/rplidar_link/sensor/rplidar/scan'],
              '/scan')
         ])
@@ -106,14 +108,14 @@ def generate_launch_description():
             'use_sim_time': use_sim_time
         }],
         arguments=[
-            ['/world/', LaunchConfiguration('world'),
-             '/model/', LaunchConfiguration('robot_name'),
+            ['/world/', world,
+             '/model/', robot_name,
              '/link/rplidar_link/sensor/rplidar/scan' +
              '@sensor_msgs/msg/LaserScan[ignition.msgs.LaserScan']
         ],
         remappings=[
-            (['/world/', LaunchConfiguration('world'),
-              '/model/', LaunchConfiguration('robot_name'),
+            (['/world/', world,
+              '/model/', robot_name,
               '/link/rplidar_link/sensor/rplidar/scan'],
              ['/', namespace, '/scan'])
         ])
@@ -128,17 +130,17 @@ def generate_launch_description():
         output='screen',
         parameters=[{'use_sim_time': use_sim_time}],
         arguments=[
-            ['/model/', LaunchConfiguration('robot_name'), '/hmi/display/raw' +
+            ['/model/', robot_name, '/hmi/display/raw' +
              '@std_msgs/msg/String' +
              ']ignition.msgs.StringMsg'],
-            ['/model/', LaunchConfiguration('robot_name'), '/hmi/display/selected' +
+            ['/model/', robot_name, '/hmi/display/selected' +
              '@std_msgs/msg/Int32' +
              ']ignition.msgs.Int32']
         ],
         remappings=[
-            (['/model/', LaunchConfiguration('robot_name'), '/hmi/display/raw'],
+            (['/model/', robot_name, '/hmi/display/raw'],
              '/hmi/display/_raw'),
-            (['/model/', LaunchConfiguration('robot_name'), '/hmi/display/selected'],
+            (['/model/', robot_name, '/hmi/display/selected'],
              '/hmi/display/_selected')
         ])
 
@@ -151,17 +153,17 @@ def generate_launch_description():
         output='screen',
         parameters=[{'use_sim_time': use_sim_time}],
         arguments=[
-            ['/model/', LaunchConfiguration('robot_name'), '/hmi/display/raw' +
+            ['/model/', robot_name, '/hmi/display/raw' +
              '@std_msgs/msg/String' +
              ']ignition.msgs.StringMsg'],
-            ['/model/', LaunchConfiguration('robot_name'), '/hmi/display/selected' +
+            ['/model/', robot_name, '/hmi/display/selected' +
              '@std_msgs/msg/Int32' +
              ']ignition.msgs.Int32']
         ],
         remappings=[
-            (['/model/', LaunchConfiguration('robot_name'), '/hmi/display/raw'],
-             '/hmi/display/_raw'),
-            (['/model/', LaunchConfiguration('robot_name'), '/hmi/display/selected'],
+            (['/model/', robot_name, '/hmi/display/raw'],
+             ['/', namespace, '/hmi/display/_raw']),
+            (['/model/', robot_name, '/hmi/display/selected'],
              ['/', namespace, '/hmi/display/_selected'])
         ])
 
@@ -175,12 +177,12 @@ def generate_launch_description():
         output='screen',
         parameters=[{'use_sim_time': use_sim_time}],
         arguments=[
-            ['/model/', LaunchConfiguration('robot_name'), '/hmi/buttons' +
+            ['/model/', robot_name, '/hmi/buttons' +
              '@std_msgs/msg/Int32' +
              '[ignition.msgs.Int32']
         ],
         remappings=[
-            (['/model/', LaunchConfiguration('robot_name'), '/hmi/buttons'],
+            (['/model/', robot_name, '/hmi/buttons'],
              '/hmi/buttons/_set')
         ])
 
@@ -193,12 +195,12 @@ def generate_launch_description():
         output='screen',
         parameters=[{'use_sim_time': use_sim_time}],
         arguments=[
-            ['/model/', LaunchConfiguration('robot_name'), '/hmi/buttons' +
+            ['/model/', robot_name, '/hmi/buttons' +
              '@std_msgs/msg/Int32' +
              '[ignition.msgs.Int32']
         ],
         remappings=[
-            (['/model/', LaunchConfiguration('robot_name'), '/hmi/buttons'],
+            (['/model/', robot_name, '/hmi/buttons'],
              ['/', namespace, '/hmi/buttons/_set'])
         ])
 
@@ -212,12 +214,12 @@ def generate_launch_description():
         output='screen',
         parameters=[{'use_sim_time': use_sim_time}],
         arguments=[
-            ['/model/', LaunchConfiguration('robot_name'), '/hmi/led/' + led +
+            ['/model/', robot_name, '/hmi/led/' + led +
              '@std_msgs/msg/Int32' +
              ']ignition.msgs.Int32'] for led in leds
         ],
         remappings=[
-            (['/model/', LaunchConfiguration('robot_name'), '/hmi/led/' + led],
+            (['/model/', robot_name, '/hmi/led/' + led],
              '/hmi/led/_' + led) for led in leds
         ])
 
@@ -230,12 +232,12 @@ def generate_launch_description():
         output='screen',
         parameters=[{'use_sim_time': use_sim_time}],
         arguments=[
-            ['/model/', LaunchConfiguration('robot_name'), '/hmi/led/' + led +
+            ['/model/', robot_name, '/hmi/led/' + led +
              '@std_msgs/msg/Int32' +
              ']ignition.msgs.Int32'] for led in leds
         ],
         remappings=[
-            (['/model/', LaunchConfiguration('robot_name'), '/hmi/led/' + led],
+            (['/model/', robot_name, '/hmi/led/' + led],
              ['/', namespace, '/hmi/led/_' + led]) for led in leds
         ])
 
@@ -249,46 +251,46 @@ def generate_launch_description():
         output='screen',
         parameters=[{'use_sim_time': use_sim_time}],
         arguments=[
-            ['/world/', LaunchConfiguration('world'),
-                '/model/', LaunchConfiguration('robot_name'),
+            ['/world/', world,
+                '/model/', robot_name,
                 '/link/oakd_pro_rgb_camera_frame/sensor/rgbd_camera/image' +
                 '@sensor_msgs/msg/Image' +
                 '[ignition.msgs.Image'],
-            ['/world/', LaunchConfiguration('world'),
-                '/model/', LaunchConfiguration('robot_name'),
+            ['/world/', world,
+                '/model/', robot_name,
                 '/link/oakd_pro_rgb_camera_frame/sensor/rgbd_camera/depth_image' +
                 '@sensor_msgs/msg/Image' +
                 '[ignition.msgs.Image'],
-            ['/world/', LaunchConfiguration('world'),
-                '/model/', LaunchConfiguration('robot_name'),
+            ['/world/', world,
+                '/model/', robot_name,
                 '/link/oakd_pro_rgb_camera_frame/sensor/rgbd_camera/points' +
                 '@sensor_msgs/msg/PointCloud2' +
                 '[ignition.msgs.PointCloudPacked'],
-            ['/world/', LaunchConfiguration('world'),
-                '/model/', LaunchConfiguration('robot_name'),
+            ['/world/', world,
+                '/model/', robot_name,
                 '/link/oakd_pro_rgb_camera_frame/sensor/rgbd_camera/camera_info' +
                 '@sensor_msgs/msg/CameraInfo' +
                 '[ignition.msgs.CameraInfo'],
                 ],
         remappings=[
-            (['/world/', LaunchConfiguration('world'),
+            (['/world/', world,
               '/model/',
-              LaunchConfiguration('robot_name'),
+              robot_name,
               '/link/oakd_pro_rgb_camera_frame/sensor/rgbd_camera/image'],
              '/color/image'),
-            (['/world/', LaunchConfiguration('world'),
+            (['/world/', world,
               '/model/',
-              LaunchConfiguration('robot_name'),
+              robot_name,
               '/link/oakd_pro_rgb_camera_frame/sensor/rgbd_camera/depth_image'],
              '/stereo/depth'),
-            (['/world/', LaunchConfiguration('world'),
+            (['/world/', world,
               '/model/',
-              LaunchConfiguration('robot_name'),
+              robot_name,
               '/link/oakd_pro_rgb_camera_frame/sensor/rgbd_camera/points'],
              '/stereo/depth/points'),
-            (['/world/', LaunchConfiguration('world'),
+            (['/world/', world,
               '/model/',
-              LaunchConfiguration('robot_name'),
+              robot_name,
               '/link/oakd_pro_rgb_camera_frame/sensor/rgbd_camera/camera_info'],
              '/color/camera_info')
         ])
@@ -302,46 +304,46 @@ def generate_launch_description():
         output='screen',
         parameters=[{'use_sim_time': use_sim_time}],
         arguments=[
-            ['/world/', LaunchConfiguration('world'),
-                '/model/', LaunchConfiguration('robot_name'),
+            ['/world/', world,
+                '/model/', robot_name,
                 '/link/oakd_pro_rgb_camera_frame/sensor/rgbd_camera/image' +
                 '@sensor_msgs/msg/Image' +
                 '[ignition.msgs.Image'],
-            ['/world/', LaunchConfiguration('world'),
-                '/model/', LaunchConfiguration('robot_name'),
+            ['/world/', world,
+                '/model/', robot_name,
                 '/link/oakd_pro_rgb_camera_frame/sensor/rgbd_camera/depth_image' +
                 '@sensor_msgs/msg/Image' +
                 '[ignition.msgs.Image'],
-            ['/world/', LaunchConfiguration('world'),
-                '/model/', LaunchConfiguration('robot_name'),
+            ['/world/', world,
+                '/model/', robot_name,
                 '/link/oakd_pro_rgb_camera_frame/sensor/rgbd_camera/points' +
                 '@sensor_msgs/msg/PointCloud2' +
                 '[ignition.msgs.PointCloudPacked'],
-            ['/world/', LaunchConfiguration('world'),
-                '/model/', LaunchConfiguration('robot_name'),
+            ['/world/', world,
+                '/model/', robot_name,
                 '/link/oakd_pro_rgb_camera_frame/sensor/rgbd_camera/camera_info' +
                 '@sensor_msgs/msg/CameraInfo' +
                 '[ignition.msgs.CameraInfo'],
                 ],
         remappings=[
-            (['/world/', LaunchConfiguration('world'),
+            (['/world/', world,
               '/model/',
-              LaunchConfiguration('robot_name'),
+              robot_name,
               '/link/oakd_pro_rgb_camera_frame/sensor/rgbd_camera/image'],
              ['/', namespace, '/color/image']),
-            (['/world/', LaunchConfiguration('world'),
+            (['/world/', world,
               '/model/',
-              LaunchConfiguration('robot_name'),
+              robot_name,
               '/link/oakd_pro_rgb_camera_frame/sensor/rgbd_camera/depth_image'],
              ['/', namespace, '/stereo/depth']),
-            (['/world/', LaunchConfiguration('world'),
+            (['/world/', world,
               '/model/',
-              LaunchConfiguration('robot_name'),
+              robot_name,
               '/link/oakd_pro_rgb_camera_frame/sensor/rgbd_camera/points'],
              ['/', namespace, '/stereo/depth/points']),
-            (['/world/', LaunchConfiguration('world'),
+            (['/world/', world,
               '/model/',
-              LaunchConfiguration('robot_name'),
+              robot_name,
               '/link/oakd_pro_rgb_camera_frame/sensor/rgbd_camera/camera_info'],
              ['/', namespace, '/color/camera_info'])
         ])
@@ -355,42 +357,42 @@ def generate_launch_description():
         output='screen',
         parameters=[{'use_sim_time': use_sim_time}],
         arguments=[
-            ['/world/', LaunchConfiguration('world'),
-             '/model/', LaunchConfiguration('robot_name'),
+            ['/world/', world,
+             '/model/', robot_name,
              '/link/oakd_lite_rgb_camera_frame/sensor/rgbd_camera/image' +
              '@sensor_msgs/msg/Image' +
              '[ignition.msgs.Image'],
-            ['/world/', LaunchConfiguration('world'),
-             '/model/', LaunchConfiguration('robot_name'),
+            ['/world/', world,
+             '/model/', robot_name,
              '/link/oakd_lite_rgb_camera_frame/sensor/rgbd_camera/depth_image' +
              '@sensor_msgs/msg/Image' +
              '[ignition.msgs.Image'],
-            ['/world/', LaunchConfiguration('world'),
-             '/model/', LaunchConfiguration('robot_name'),
+            ['/world/', world,
+             '/model/', robot_name,
              '/link/oakd_lite_rgb_camera_frame/sensor/rgbd_camera/points' +
              '@sensor_msgs/msg/PointCloud2' +
              '[ignition.msgs.PointCloudPacked'],
-            ['/world/', LaunchConfiguration('world'),
-             '/model/', LaunchConfiguration('robot_name'),
+            ['/world/', world,
+             '/model/', robot_name,
              '/link/oakd_lite_rgb_camera_frame/sensor/rgbd_camera/camera_info' +
              '@sensor_msgs/msg/CameraInfo' +
              '[ignition.msgs.CameraInfo'],
                 ],
         remappings=[
-            (['/world/', LaunchConfiguration('world'),
-              '/model/', LaunchConfiguration('robot_name'),
+            (['/world/', world,
+              '/model/', robot_name,
               '/link/oakd_lite_rgb_camera_frame/sensor/rgbd_camera/image'],
              '/color/image'),
-            (['/world/', LaunchConfiguration('world'),
-              '/model/', LaunchConfiguration('robot_name'),
+            (['/world/', world,
+              '/model/', robot_name,
               '/link/oakd_lite_rgb_camera_frame/sensor/rgbd_camera/depth_image'],
              '/stereo/depth'),
-            (['/world/', LaunchConfiguration('world'),
-              '/model/', LaunchConfiguration('robot_name'),
+            (['/world/', world,
+              '/model/', robot_name,
               '/link/oakd_lite_rgb_camera_frame/sensor/rgbd_camera/points'],
              '/stereo/depth/points'),
-            (['/world/', LaunchConfiguration('world'),
-              '/model/', LaunchConfiguration('robot_name'),
+            (['/world/', world,
+              '/model/', robot_name,
               '/link/oakd_lite_rgb_camera_frame/sensor/rgbd_camera/camera_info'],
              '/color/camera_info')
         ])
@@ -404,42 +406,42 @@ def generate_launch_description():
         output='screen',
         parameters=[{'use_sim_time': use_sim_time}],
         arguments=[
-            ['/world/', LaunchConfiguration('world'),
-             '/model/', LaunchConfiguration('robot_name'),
+            ['/world/', world,
+             '/model/', robot_name,
              '/link/oakd_lite_rgb_camera_frame/sensor/rgbd_camera/image' +
              '@sensor_msgs/msg/Image' +
              '[ignition.msgs.Image'],
-            ['/world/', LaunchConfiguration('world'),
-             '/model/', LaunchConfiguration('robot_name'),
+            ['/world/', world,
+             '/model/', robot_name,
              '/link/oakd_lite_rgb_camera_frame/sensor/rgbd_camera/depth_image' +
              '@sensor_msgs/msg/Image' +
              '[ignition.msgs.Image'],
-            ['/world/', LaunchConfiguration('world'),
-             '/model/', LaunchConfiguration('robot_name'),
+            ['/world/', world,
+             '/model/', robot_name,
              '/link/oakd_lite_rgb_camera_frame/sensor/rgbd_camera/points' +
              '@sensor_msgs/msg/PointCloud2' +
              '[ignition.msgs.PointCloudPacked'],
-            ['/world/', LaunchConfiguration('world'),
-             '/model/', LaunchConfiguration('robot_name'),
+            ['/world/', world,
+             '/model/', robot_name,
              '/link/oakd_lite_rgb_camera_frame/sensor/rgbd_camera/camera_info' +
              '@sensor_msgs/msg/CameraInfo' +
              '[ignition.msgs.CameraInfo'],
                 ],
         remappings=[
-            (['/world/', LaunchConfiguration('world'),
-              '/model/', LaunchConfiguration('robot_name'),
+            (['/world/', world,
+              '/model/', robot_name,
               '/link/oakd_lite_rgb_camera_frame/sensor/rgbd_camera/image'],
              ['/', namespace, '/color/image']),
-            (['/world/', LaunchConfiguration('world'),
-              '/model/', LaunchConfiguration('robot_name'),
+            (['/world/', world,
+              '/model/', robot_name,
               '/link/oakd_lite_rgb_camera_frame/sensor/rgbd_camera/depth_image'],
              ['/', namespace, '/stereo/depth']),
-            (['/world/', LaunchConfiguration('world'),
-              '/model/', LaunchConfiguration('robot_name'),
+            (['/world/', world,
+              '/model/', robot_name,
               '/link/oakd_lite_rgb_camera_frame/sensor/rgbd_camera/points'],
              ['/', namespace, '/stereo/depth/points']),
-            (['/world/', LaunchConfiguration('world'),
-              '/model/', LaunchConfiguration('robot_name'),
+            (['/world/', world,
+              '/model/', robot_name,
               '/link/oakd_lite_rgb_camera_frame/sensor/rgbd_camera/camera_info'],
              ['/', namespace, '/color/camera_info'])
         ])

@@ -71,7 +71,7 @@ void Turtlebot4Hmi::UpdateTopics()
   else
   {
     App()->findChild<MainWindow *>()->notifyWithDuration(
-      QString::fromStdString("Advertising new topics.. '<b>"), 4000);
+      QString::fromStdString("Advertising new topics based on robot name: " + this->namespace_), 4000);
   }
 
 }
@@ -79,7 +79,7 @@ void Turtlebot4Hmi::UpdateTopics()
 void Turtlebot4Hmi::SetNamespace(const QString &_namespace)
 {
   this->namespace_ = _namespace.toStdString();
-  ignmsg << "A new namespace has been entered: '" <<
+  ignmsg << "A new robot name has been entered: '" <<
       this->namespace_ << " ' " <<std::endl;
 
   // Unsubscribe from old topics 
@@ -96,22 +96,22 @@ void Turtlebot4Hmi::SetNamespace(const QString &_namespace)
   // Change all topics
   if (this->namespace_ != "")
   {
-    this->hmi_button_topic_ = "/" + this->namespace_ + "/model/turtlebot4/hmi/buttons";
-    this->create3_button_topic_ = "/" + this->namespace_ + "/buttons";
-    this->display_topic_ = "/" + this->namespace_ + "/model/turtlebot4/hmi/display/raw";
-    this->display_selected_topic_ = "/" + this->namespace_ + "/model/turtlebot4/hmi/display/selected";
-    this->power_led_topic_ = "/" + this->namespace_ + "/model/turtlebot4/hmi/led/power";
-    this->motors_led_topic_ = "/" + this->namespace_ + "/model/turtlebot4/hmi/led/motors";
-    this->comms_led_topic_ = "/" + this->namespace_ + "/model/turtlebot4/hmi/led/comms";
-    this->wifi_led_topic_ = "/" + this->namespace_ + "/model/turtlebot4/hmi/led/wifi";
-    this->battery_led_topic_ = "/" + this->namespace_ + "/model/turtlebot4/hmi/led/battery";
-    this->user1_led_topic_ = "/" + this->namespace_ + "/model/turtlebot4/hmi/led/user1";
-    this->user2_led_topic_ = "/" + this->namespace_ + "/model/turtlebot4/hmi/led/user2";
+    this->hmi_button_topic_ = "/model/" + this->namespace_ + "/hmi/buttons";
+    this->create3_button_topic_ = "/model/" + this->namespace_ + "/buttons";
+    this->display_topic_ = "/model/" + this->namespace_ +  "hmi/display/raw";
+    this->display_selected_topic_ = "/model/" + this->namespace_ + "hmi/display/selected";
+    this->power_led_topic_ = "/model/" + this->namespace_ + "hmi/led/power";
+    this->motors_led_topic_ = "/model/" + this->namespace_ + "hmi/led/motors";
+    this->comms_led_topic_ = "/model/" + this->namespace_ + "hmi/led/comms";
+    this->wifi_led_topic_ = "/model/" + this->namespace_ + "hmi/led/wifi";
+    this->battery_led_topic_ = "/model/" + this->namespace_ + "hmi/led/battery";
+    this->user1_led_topic_ = "/model/" + this->namespace_ + "hmi/led/user1";
+    this->user2_led_topic_ = "/model/" + this->namespace_ + "hmi/led/user2";
   }
   else
   {
     this->hmi_button_topic_ = "/model/turtlebot4/hmi/buttons";
-    this->create3_button_topic_ = "/buttons";
+    this->create3_button_topic_ = "model/turtlebot4/buttons";
     this->display_topic_ = "/model/turtlebot4/hmi/display/raw";
     this->display_selected_topic_ = "/model/turtlebot4/hmi/display/selected";
     this->power_led_topic_ = "/model/turtlebot4/hmi/led/power";

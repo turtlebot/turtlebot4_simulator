@@ -106,9 +106,9 @@ private:
   ignition::transport::Node::Publisher hmi_button_pub_;
   ignition::transport::Node::Publisher create3_button_pub_;
 
-  std::string namespace_ = "";
+  std::string namespace_ = "turtlebot4";
   std::string hmi_button_topic_ = "/model/turtlebot4/hmi/buttons";
-  std::string create3_button_topic_ = "/buttons";
+  std::string create3_button_topic_ = "/model/turtlebot4/buttons";
   std::string display_topic_ = "/model/turtlebot4/hmi/display/raw";
   std::string display_selected_topic_ = "/model/turtlebot4/hmi/display/selected";
   std::string power_led_topic_ = "/model/turtlebot4/hmi/led/power";

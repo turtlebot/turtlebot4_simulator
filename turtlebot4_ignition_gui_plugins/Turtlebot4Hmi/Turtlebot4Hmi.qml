@@ -84,7 +84,7 @@ Rectangle
     // Namespace input
     Label {
       id: namespaceLabel
-      text: "Namespace:"
+      text: "Robot Name:"
       Layout.fillWidth: true
       Layout.margins: 10
       anchors.top: create3ButtonsRectangle.top
@@ -99,7 +99,7 @@ Rectangle
       Layout.fillWidth: true
       Layout.margins: 10
       text: Turtlebot4Hmi.namespace
-      placeholderText: qsTr("insert namespace")
+      placeholderText: qsTr("insert robot name")
       anchors.top: namespaceLabel.bottom
       anchors.topMargin: 5
       anchors.left: parent.left
