@@ -22,9 +22,9 @@ from ament_index_python.packages import get_package_share_directory
 from launch import LaunchContext, LaunchDescription, SomeSubstitutionsType, Substitution
 from launch.actions import DeclareLaunchArgument
 from launch.actions import IncludeLaunchDescription, SetEnvironmentVariable
-from launch.conditions import IfCondition, LaunchConfigurationEquals
+from launch.conditions import IfCondition, LaunchConfigurationEquals, LaunchConfigurationNotEquals
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
+from launch.substitutions import LaunchConfiguration, PathJoinSubstitution, PythonExpression
 
 from launch_ros.actions import Node
 
@@ -160,6 +160,7 @@ def generate_launch_description():
     yaw = LaunchConfiguration('yaw')
     turtlebot4_node_yaml_file = LaunchConfiguration('param_file')
     robot_name = LaunchConfiguration('robot_name')
+    model = LaunchConfiguration('model')
     namespace = LaunchConfiguration('namespace')
     namespaced_robot_description = [namespace, '/robot_description']
     namespaced_dock_description = [namespace, '/standard_dock_description']
@@ -218,7 +219,7 @@ def generate_launch_description():
             '-x', x_dock,
             '-y', y,
             '-z', z,
-            '-Y', '3.141592',
+            '-Y', yaw_dock,
             '-topic', namespaced_dock_description],
         output='screen')
 
@@ -244,7 +245,8 @@ def generate_launch_description():
                           ('localization', LaunchConfiguration('localization')),
                           ('use_sim_time', LaunchConfiguration('use_sim_time')),
                           ('map', LaunchConfiguration('map')),
-                          ('namespace', namespace)]
+                          ('namespace', namespace),
+                          ('use_namespace', 'true')]
     )
 
     turtlebot4_node = IncludeLaunchDescription(
@@ -268,7 +270,9 @@ def generate_launch_description():
 
     # RPLIDAR static transforms
     rplidar_stf = Node(
+            condition=LaunchConfigurationEquals('namespace', ''),
             name='rplidar_stf',
+            namespace=namespace,
             package='tf2_ros',
             executable='static_transform_publisher',
             output='screen',
@@ -277,9 +281,23 @@ def generate_launch_description():
                 'rplidar_link', [LaunchConfiguration('robot_name'), '/rplidar_link/rplidar']]
         )
 
+    rplidar_stf_namespaced = Node(
+            condition=LaunchConfigurationNotEquals('namespace', ''),
+            name='rplidar_stf',
+            namespace=namespace,
+            package='tf2_ros',
+            executable='static_transform_publisher',
+            output='screen',
+            arguments=[
+                '0', '0', '0', '0', '0.0', '0.0',
+                ['/', namespace, '/rplidar_link'], [LaunchConfiguration('robot_name'), '/rplidar_link/rplidar']]
+        )
+
     # OAKD static transforms
     oakd_pro_stf = Node(
+            condition=IfCondition(PythonExpression(["'", namespace, "' == '' and '", model, "' == 'standard'"])),
             name='camera_stf',
+            namespace=namespace,
             package='tf2_ros',
             executable='static_transform_publisher',
             output='screen',
@@ -287,12 +305,27 @@ def generate_launch_description():
                 '0', '0', '0', '0', '0', '0',
                 'oakd_pro_rgb_camera_optical_frame',
                 [LaunchConfiguration('robot_name'), '/oakd_pro_rgb_camera_frame/rgbd_camera']
+            ]
+        )
+
+    oakd_pro_stf_namespaced = Node(
+            condition=IfCondition(PythonExpression(["'", namespace, "' != '' and '", model, "' == 'standard'"])),
+            name='camera_stf',
+            namespace=namespace,
+            package='tf2_ros',
+            executable='static_transform_publisher',
+            output='screen',
+            arguments=[
+                '0', '0', '0', '0', '0', '0',
+                ['/', namespace, '/oakd_pro_rgb_camera_optical_frame'],
+                [LaunchConfiguration('robot_name'), '/oakd_pro_rgb_camera_frame/rgbd_camera']
             ],
-            condition=LaunchConfigurationEquals('model', 'standard')
         )
 
     oakd_lite_stf = Node(
+            condition=IfCondition(PythonExpression(["'", namespace, "' == '' and '", model, "' == 'lite'"])),
             name='camera_stf',
+            namespace=namespace,
             package='tf2_ros',
             executable='static_transform_publisher',
             output='screen',
@@ -300,9 +333,22 @@ def generate_launch_description():
                 '0', '0', '0', '0', '0', '0',
                 'oakd_lite_rgb_camera_optical_frame',
                 [LaunchConfiguration('robot_name'), '/oakd_lite_rgb_camera_frame/rgbd_camera']
-            ],
-            condition=LaunchConfigurationEquals('model', 'lite')
+            ]
         )
+
+    oakd_lite_stf_namespaced = Node(
+        condition=IfCondition(PythonExpression(["'", namespace, "' != '' and '", model, "' == 'lite'"])),
+        name='camera_stf',
+        namespace=namespace,
+        package='tf2_ros',
+        executable='static_transform_publisher',
+        output='screen',
+        arguments=[
+            '0', '0', '0', '0', '0', '0',
+            ['/', namespace, '/oakd_lite_rgb_camera_optical_frame'],
+            [LaunchConfiguration('robot_name'), '/oakd_lite_rgb_camera_frame/rgbd_camera']
+        ]
+    )
 
     # Define LaunchDescription variable
     ld = LaunchDescription(ARGUMENTS)
@@ -324,4 +370,7 @@ def generate_launch_description():
     ld.add_action(rplidar_stf)
     ld.add_action(oakd_pro_stf)
     ld.add_action(oakd_lite_stf)
+    ld.add_action(rplidar_stf_namespaced)
+    ld.add_action(oakd_pro_stf_namespaced)
+    ld.add_action(oakd_lite_stf_namespaced)
     return ld
