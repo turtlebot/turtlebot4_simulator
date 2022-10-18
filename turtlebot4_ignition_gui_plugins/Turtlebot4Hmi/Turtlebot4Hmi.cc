@@ -73,7 +73,6 @@ void Turtlebot4Hmi::UpdateTopics()
     App()->findChild<MainWindow *>()->notifyWithDuration(
       QString::fromStdString("Advertising new topics based on robot name: " + this->namespace_), 4000);
   }
-
 }
 
 void Turtlebot4Hmi::SetNamespace(const QString &_namespace)
@@ -98,15 +97,15 @@ void Turtlebot4Hmi::SetNamespace(const QString &_namespace)
   {
     this->hmi_button_topic_ = "/model/" + this->namespace_ + "/hmi/buttons";
     this->create3_button_topic_ = "/model/" + this->namespace_ + "/buttons";
-    this->display_topic_ = "/model/" + this->namespace_ +  "hmi/display/raw";
-    this->display_selected_topic_ = "/model/" + this->namespace_ + "hmi/display/selected";
-    this->power_led_topic_ = "/model/" + this->namespace_ + "hmi/led/power";
-    this->motors_led_topic_ = "/model/" + this->namespace_ + "hmi/led/motors";
-    this->comms_led_topic_ = "/model/" + this->namespace_ + "hmi/led/comms";
-    this->wifi_led_topic_ = "/model/" + this->namespace_ + "hmi/led/wifi";
-    this->battery_led_topic_ = "/model/" + this->namespace_ + "hmi/led/battery";
-    this->user1_led_topic_ = "/model/" + this->namespace_ + "hmi/led/user1";
-    this->user2_led_topic_ = "/model/" + this->namespace_ + "hmi/led/user2";
+    this->display_topic_ = "/model/" + this->namespace_ +  "/hmi/display/raw";
+    this->display_selected_topic_ = "/model/" + this->namespace_ + "/hmi/display/selected";
+    this->power_led_topic_ = "/model/" + this->namespace_ + "/hmi/led/power";
+    this->motors_led_topic_ = "/model/" + this->namespace_ + "/hmi/led/motors";
+    this->comms_led_topic_ = "/model/" + this->namespace_ + "/hmi/led/comms";
+    this->wifi_led_topic_ = "/model/" + this->namespace_ + "/hmi/led/wifi";
+    this->battery_led_topic_ = "/model/" + this->namespace_ + "/hmi/led/battery";
+    this->user1_led_topic_ = "/model/" + this->namespace_ + "/hmi/led/user1";
+    this->user2_led_topic_ = "/model/" + this->namespace_ + "/hmi/led/user2";
   }
   else
   {
