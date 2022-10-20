@@ -73,9 +73,11 @@ ARGUMENTS = [
                           description='Robot name'),
     DeclareLaunchArgument('namespace', default_value='',
                           description='robot namespace'),
+    DeclareLaunchArgument('yaw', default_value='3.145',
+                          description='robot yaw rotation at spawn'),
 ]
 
-for pose_element in ['x', 'y', 'z', 'yaw']:
+for pose_element in ['x', 'y', 'z']:
     ARGUMENTS.append(DeclareLaunchArgument(pose_element, default_value='0.0',
                      description=f'{pose_element} component of the robot pose.'))
 
