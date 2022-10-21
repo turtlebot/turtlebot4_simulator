@@ -25,9 +25,6 @@ from launch.actions import IncludeLaunchDescription, SetEnvironmentVariable
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 
-from launch_ros.actions import Node
-
-
 class OffsetParser(Substitution):
     def __init__(
             self,
@@ -43,7 +40,6 @@ class OffsetParser(Substitution):
     ) -> str:
         number = float(self.__number.perform(context))
         return f'{number + self.__offset}'
-
 
 ARGUMENTS = [
     DeclareLaunchArgument('rviz', default_value='false',
@@ -81,7 +77,6 @@ for pose_element in ['x', 'y', 'z']:
     ARGUMENTS.append(DeclareLaunchArgument(pose_element, default_value='0.0',
                      description=f'{pose_element} component of the robot pose.'))
 
-
 def generate_launch_description():
 
     # Directories
@@ -91,8 +86,6 @@ def generate_launch_description():
         'turtlebot4_ignition_gui_plugins')
     pkg_turtlebot4_description = get_package_share_directory(
         'turtlebot4_description')
-    pkg_turtlebot4_navigation = get_package_share_directory(
-        'turtlebot4_navigation')
 
     pkg_irobot_create_description = get_package_share_directory(
         'irobot_create_description')
@@ -122,19 +115,6 @@ def generate_launch_description():
     # Paths
     ign_gazebo_launch = PathJoinSubstitution(
         [pkg_ros_ign_gazebo, 'launch', 'ign_gazebo.launch.py'])
-
-    # Parameters
-    param_file_cmd = DeclareLaunchArgument(
-        'param_file',
-        default_value=PathJoinSubstitution(
-            [pkg_turtlebot4_ignition_bringup, 'config', 'turtlebot4_node.yaml']),
-        description='Turtlebot4 Robot param file')
-
-    declare_map_yaml_cmd = DeclareLaunchArgument(
-        'map',
-        default_value=PathJoinSubstitution(
-            [pkg_turtlebot4_navigation, 'maps', 'depot.yaml']),
-        description='Full path to map yaml file to load')
 
     # Launch configurations
     robot_name = LaunchConfiguration('robot_name')
@@ -176,13 +156,10 @@ def generate_launch_description():
                           }.items()
     )
     
-
     # Define LaunchDescription variable
     ld = LaunchDescription(ARGUMENTS)
     ld.add_action(ign_resource_path)
     ld.add_action(ign_gui_plugin_path)
-    ld.add_action(param_file_cmd)
-    ld.add_action(declare_map_yaml_cmd)
     ld.add_action(ignition_gazebo)
     ld.add_action(spawn_robot)
     return ld

@@ -204,7 +204,7 @@ def generate_launch_description():
              ['/', namespace, '/hmi/buttons/_set'])
         ])
 
-    # Buttons message bridge
+    # Led message bridge
     hmi_led_msg_bridge = Node(
         condition=IfCondition(PythonExpression(["'", namespace, "' == '' and '", model, "' == 'standard'"])),
         package='ros_ign_bridge',
