@@ -182,6 +182,18 @@ def generate_launch_description():
     # Navigation
     navigation = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([nav_launch]),
+        condition=LaunchConfigurationEquals('namespace', ''),
+        launch_arguments=[('slam', LaunchConfiguration('slam')),
+                          ('nav2', LaunchConfiguration('nav2')),
+                          ('localization', LaunchConfiguration('localization')),
+                          ('use_sim_time', LaunchConfiguration('use_sim_time')),
+                          ('map', LaunchConfiguration('map')),
+                          ('use_namespace', 'false')]
+    )
+
+    navigation_namespaced = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([nav_launch]),
+        condition=LaunchConfigurationNotEquals('namespace', ''),
         launch_arguments=[('slam', LaunchConfiguration('slam')),
                           ('nav2', LaunchConfiguration('nav2')),
                           ('localization', LaunchConfiguration('localization')),
@@ -306,6 +318,7 @@ def generate_launch_description():
     ld.add_action(create3_ignition_nodes)
     ld.add_action(turtlebot4_node)
     ld.add_action(navigation)
+    ld.add_action(navigation_namespaced)
     ld.add_action(rplidar_stf)
     ld.add_action(oakd_pro_stf)
     ld.add_action(oakd_lite_stf)
