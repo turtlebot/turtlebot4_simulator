@@ -31,20 +31,9 @@ ARGUMENTS = [
     DeclareLaunchArgument('rviz', default_value='false',
                           choices=['true', 'false'],
                           description='Start rviz.'),
-    DeclareLaunchArgument('slam', default_value='off',
-                          choices=['off', 'sync', 'async'],
-                          description='Whether to run a SLAM'),
-    DeclareLaunchArgument('localization', default_value='false',
-                          choices=['true', 'false'],
-                          description='Whether to run localization'),
-    DeclareLaunchArgument('nav2', default_value='false',
-                          choices=['true', 'false'],
-                          description='Run nav2'),
     DeclareLaunchArgument('use_sim_time', default_value='true',
                           choices=['true', 'false'],
                           description='use_sim_time'),
-    DeclareLaunchArgument('world', default_value='depot',
-                          description='Ignition World'),
     DeclareLaunchArgument('model', default_value='standard',
                           choices=['standard', 'lite'],
                           description='Turtlebot4 Model'),
@@ -57,6 +46,7 @@ ARGUMENTS = [
                           description='robot namespace'),
     DeclareLaunchArgument('yaw', default_value='3.145',
                           description='robot yaw rotation at spawn'),
+    
 ]
 
 for pose_element in ['x', 'y', 'z']:
@@ -85,8 +75,6 @@ def generate_launch_description():
         [pkg_turtlebot4_ignition_bringup, 'launch', 'ros_ign_bridge.launch.py'])
     rviz_launch = PathJoinSubstitution(
         [pkg_turtlebot4_viz, 'launch', 'view_robot.launch.py'])
-    nav_launch = PathJoinSubstitution(
-        [pkg_turtlebot4_navigation, 'launch', 'nav_bringup.launch.py'])
     node_launch = PathJoinSubstitution(
         [pkg_turtlebot4_ignition_bringup, 'launch', 'turtlebot4_nodes.launch.py'])
     create3_nodes_launch = PathJoinSubstitution(
@@ -121,7 +109,6 @@ def generate_launch_description():
     namespaced_robot_description = [namespace, '/robot_description']
     namespaced_dock_description = [namespace, '/standard_dock_description']
 
-
     # Robot description
     robot_description_launch = IncludeLaunchDescription(
             PythonLaunchDescriptionSource([robot_description_launch]),
@@ -141,6 +128,18 @@ def generate_launch_description():
 
     # Spawn Turtlebot4
     spawn_robot = Node(
+        package='ros_ign_gazebo',
+        executable='create',
+        arguments=[
+            '-name', robot_name,
+            '-x', x,
+            '-y', y,
+            '-z', z,
+            '-Y', yaw,
+            '-topic', namespaced_robot_description],
+        output='screen')
+    
+    spawn_robot_namespaced = Node(
         package='ros_ign_gazebo',
         executable='create',
         arguments=[
@@ -177,30 +176,7 @@ def generate_launch_description():
     rviz2 = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([rviz_launch]),
         condition=IfCondition(LaunchConfiguration('rviz')),
-    )
-
-    # Navigation
-    navigation = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([nav_launch]),
-        condition=LaunchConfigurationEquals('namespace', ''),
-        launch_arguments=[('slam', LaunchConfiguration('slam')),
-                          ('nav2', LaunchConfiguration('nav2')),
-                          ('localization', LaunchConfiguration('localization')),
-                          ('use_sim_time', LaunchConfiguration('use_sim_time')),
-                          ('map', LaunchConfiguration('map')),
-                          ('use_namespace', 'false')]
-    )
-
-    navigation_namespaced = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([nav_launch]),
-        condition=LaunchConfigurationNotEquals('namespace', ''),
-        launch_arguments=[('slam', LaunchConfiguration('slam')),
-                          ('nav2', LaunchConfiguration('nav2')),
-                          ('localization', LaunchConfiguration('localization')),
-                          ('use_sim_time', LaunchConfiguration('use_sim_time')),
-                          ('map', LaunchConfiguration('map')),
-                          ('namespace', namespace),
-                          ('use_namespace', 'true')]
+        launch_arguments=[('namespace', namespace)]
     )
 
     turtlebot4_node = IncludeLaunchDescription(
@@ -244,7 +220,7 @@ def generate_launch_description():
             output='screen',
             arguments=[
                 '0', '0', '0', '0', '0.0', '0.0',
-                ['/', namespace, '/rplidar_link'], [LaunchConfiguration('robot_name'), '/rplidar_link/rplidar']]
+                [namespace, '/rplidar_link'], [LaunchConfiguration('robot_name'), '/rplidar_link/rplidar']]
         )
 
     # OAKD static transforms
@@ -271,7 +247,7 @@ def generate_launch_description():
             output='screen',
             arguments=[
                 '0', '0', '0', '0', '0', '0',
-                ['/', namespace, '/oakd_pro_rgb_camera_optical_frame'],
+                [namespace, '/oakd_pro_rgb_camera_optical_frame'],
                 [LaunchConfiguration('robot_name'), '/oakd_pro_rgb_camera_frame/rgbd_camera']
             ],
         )
@@ -299,10 +275,20 @@ def generate_launch_description():
         output='screen',
         arguments=[
             '0', '0', '0', '0', '0', '0',
-            ['/', namespace, '/oakd_lite_rgb_camera_optical_frame'],
+            [namespace, '/oakd_lite_rgb_camera_optical_frame'],
             [LaunchConfiguration('robot_name'), '/oakd_lite_rgb_camera_frame/rgbd_camera']
         ]
     )
+
+    # Force robot state publisher
+    # robot_state_publisher = Node(
+    #     package='robot_state_publisher',
+    #     executable='robot_state_publisher',
+    #     namespace=namespace,
+    #     output='screen',
+    #     parameters=[{'use_sim_time': 'True'}],
+    #     remappings=[('/tf', 'tf'), ('/tf_static', 'tf_static')],
+    #     arguments=[urdf])
 
     # Define LaunchDescription variable
     ld = LaunchDescription(ARGUMENTS)
@@ -317,12 +303,11 @@ def generate_launch_description():
     ld.add_action(create3_nodes)
     ld.add_action(create3_ignition_nodes)
     ld.add_action(turtlebot4_node)
-    ld.add_action(navigation)
-    ld.add_action(navigation_namespaced)
     ld.add_action(rplidar_stf)
     ld.add_action(oakd_pro_stf)
     ld.add_action(oakd_lite_stf)
     ld.add_action(rplidar_stf_namespaced)
     ld.add_action(oakd_pro_stf_namespaced)
     ld.add_action(oakd_lite_stf_namespaced)
+    #ld.add_action(robot_state_publisher)
     return ld

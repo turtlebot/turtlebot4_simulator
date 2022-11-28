@@ -144,7 +144,6 @@ def generate_launch_description():
                           'z': LaunchConfiguration('z'),
                           'yaw': LaunchConfiguration('yaw'),
                           'robot_name': robot_name,
-                          'robot_description': '/robot_description',
                           'world' : LaunchConfiguration('world'),
                           'model' : LaunchConfiguration('model'),
                           'slam' : LaunchConfiguration('slam'),
