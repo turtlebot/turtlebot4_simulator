@@ -106,8 +106,8 @@ def generate_launch_description():
     robot_name = LaunchConfiguration('robot_name')
     model = LaunchConfiguration('model')
     namespace = LaunchConfiguration('namespace')
-    namespaced_robot_description = [namespace, '/robot_description']
-    namespaced_dock_description = [namespace, '/standard_dock_description']
+    prefixed_robot_description = ['/', namespace, '/robot_description']
+    prefixed_dock_description = ['/', namespace, '/standard_dock_description']
 
     # Robot description
     robot_description_launch = IncludeLaunchDescription(
@@ -128,6 +128,7 @@ def generate_launch_description():
 
     # Spawn Turtlebot4
     spawn_robot = Node(
+        condition=LaunchConfigurationEquals('namespace', ''),
         package='ros_ign_gazebo',
         executable='create',
         arguments=[
@@ -136,10 +137,11 @@ def generate_launch_description():
             '-y', y,
             '-z', z,
             '-Y', yaw,
-            '-topic', namespaced_robot_description],
+            '-topic', '/robot_description'],
         output='screen')
     
     spawn_robot_namespaced = Node(
+        condition=LaunchConfigurationNotEquals('namespace', ''),
         package='ros_ign_gazebo',
         executable='create',
         arguments=[
@@ -148,11 +150,12 @@ def generate_launch_description():
             '-y', y,
             '-z', z,
             '-Y', yaw,
-            '-topic', namespaced_robot_description],
+            '-topic', prefixed_robot_description],
         output='screen')
 
     # Spawn dock
     spawn_dock = Node(
+        condition=LaunchConfigurationEquals('namespace', ''),
         package='ros_ign_gazebo',
         executable='create',
         arguments=[
@@ -161,7 +164,20 @@ def generate_launch_description():
             '-y', y,
             '-z', z,
             '-Y', yaw_dock,
-            '-topic', namespaced_dock_description],
+            '-topic', '/standard_dock_description'],
+        output='screen')
+
+    spawn_dock_namespaced = Node(
+        condition=LaunchConfigurationNotEquals('namespace', ''),
+        package='ros_ign_gazebo',
+        executable='create',
+        arguments=[
+            '-name', (robot_name, '_standard_dock'),
+            '-x', x_dock,
+            '-y', y,
+            '-z', z,
+            '-Y', yaw_dock,
+            '-topic', prefixed_dock_description],
         output='screen')
 
     # ROS Ign bridge
@@ -280,16 +296,6 @@ def generate_launch_description():
         ]
     )
 
-    # Force robot state publisher
-    # robot_state_publisher = Node(
-    #     package='robot_state_publisher',
-    #     executable='robot_state_publisher',
-    #     namespace=namespace,
-    #     output='screen',
-    #     parameters=[{'use_sim_time': 'True'}],
-    #     remappings=[('/tf', 'tf'), ('/tf_static', 'tf_static')],
-    #     arguments=[urdf])
-
     # Define LaunchDescription variable
     ld = LaunchDescription(ARGUMENTS)
     ld.add_action(param_file_cmd)
@@ -299,7 +305,9 @@ def generate_launch_description():
     ld.add_action(robot_description_launch)
     ld.add_action(dock_description)
     ld.add_action(spawn_robot)
+    ld.add_action(spawn_robot_namespaced)
     ld.add_action(spawn_dock)
+    ld.add_action(spawn_dock_namespaced)
     ld.add_action(create3_nodes)
     ld.add_action(create3_ignition_nodes)
     ld.add_action(turtlebot4_node)
@@ -309,5 +317,4 @@ def generate_launch_description():
     ld.add_action(rplidar_stf_namespaced)
     ld.add_action(oakd_pro_stf_namespaced)
     ld.add_action(oakd_lite_stf_namespaced)
-    #ld.add_action(robot_state_publisher)
     return ld
