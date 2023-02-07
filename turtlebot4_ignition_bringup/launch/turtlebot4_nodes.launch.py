@@ -29,8 +29,8 @@ ARGUMENTS = [
                           description='robot namespace'),
 ]
 
-
 def generate_launch_description():
+
 
     # Directories
     pkg_turtlebot4_ignition_bringup = get_package_share_directory('turtlebot4_ignition_bringup')
@@ -42,19 +42,21 @@ def generate_launch_description():
             [pkg_turtlebot4_ignition_bringup, 'config', 'turtlebot4_node.yaml']),
         description='Turtlebot4 Robot param file'
     )
-
     turtlebot4_node_yaml_file = LaunchConfiguration('param_file')
     namespace = LaunchConfiguration('namespace')
+    remappings = [('/tf', 'tf'),
+                  ('/tf_static', 'tf_static')]
 
     # Turtlebot4 node
     turtlebot4_node = Node(
         package='turtlebot4_node',
         name='turtlebot4_node',
         namespace=namespace,
+        remappings=remappings,
         executable='turtlebot4_node',
         parameters=[turtlebot4_node_yaml_file,
                     {'model': LaunchConfiguration('model')}],
-        output='screen',
+        output='screen'
     )
 
     # Turtlebot4 Ignition Hmi node

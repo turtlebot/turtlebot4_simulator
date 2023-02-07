@@ -106,8 +106,6 @@ def generate_launch_description():
     robot_name = LaunchConfiguration('robot_name')
     model = LaunchConfiguration('model')
     namespace = LaunchConfiguration('namespace')
-    prefixed_robot_description = ['/', namespace, '/robot_description']
-    prefixed_dock_description = ['/', namespace, '/standard_dock_description']
 
     # Robot description
     robot_description_launch = IncludeLaunchDescription(
@@ -150,7 +148,7 @@ def generate_launch_description():
             '-y', y,
             '-z', z,
             '-Y', yaw,
-            '-topic', prefixed_robot_description],
+            '-topic', ['/', namespace, '/robot_description']],
         output='screen')
 
     # Spawn dock
@@ -177,7 +175,7 @@ def generate_launch_description():
             '-y', y,
             '-z', z,
             '-Y', yaw_dock,
-            '-topic', prefixed_dock_description],
+            '-topic', ['/', namespace, '/standard_dock_description']],
         output='screen')
 
     # ROS Ign bridge
@@ -283,17 +281,17 @@ def generate_launch_description():
         )
 
     oakd_lite_stf_namespaced = Node(
-        condition=IfCondition(PythonExpression(["'", namespace, "' != '' and '", model, "' == 'lite'"])),
-        name='camera_stf',
-        namespace=namespace,
-        package='tf2_ros',
-        executable='static_transform_publisher',
-        output='screen',
-        arguments=[
-            '0', '0', '0', '0', '0', '0',
-            [namespace, '/oakd_lite_rgb_camera_optical_frame'],
-            [LaunchConfiguration('robot_name'), '/oakd_lite_rgb_camera_frame/rgbd_camera']
-        ]
+            condition=IfCondition(PythonExpression(["'", namespace, "' != '' and '", model, "' == 'lite'"])),
+            name='camera_stf',
+            namespace=namespace,
+            package='tf2_ros',
+            executable='static_transform_publisher',
+            output='screen',
+            arguments=[
+                '0', '0', '0', '0', '0', '0',
+                [namespace, '/oakd_lite_rgb_camera_optical_frame'],
+                [LaunchConfiguration('robot_name'), '/oakd_lite_rgb_camera_frame/rgbd_camera']
+            ]
     )
 
     # Define LaunchDescription variable
