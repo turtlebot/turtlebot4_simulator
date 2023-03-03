@@ -19,8 +19,9 @@
 #ifndef TURTLEBOT4_IGNITION_TOOLBOX__HMI_NODE_HPP_
 #define TURTLEBOT4_IGNITION_TOOLBOX__HMI_NODE_HPP_
 
-#include <rclcpp/rclcpp.hpp>
 #include <string>
+
+#include <rclcpp/rclcpp.hpp>
 
 #include "std_msgs/msg/int32.hpp"
 #include "std_msgs/msg/string.hpp"
