@@ -19,12 +19,12 @@
 #ifndef TURTLEBOT4_IGNITION_GUI_PLUGINS__TURTLEBOT4HMI__TURTLEBOT4HMI_HH_
 #define TURTLEBOT4_IGNITION_GUI_PLUGINS__TURTLEBOT4HMI__TURTLEBOT4HMI_HH_
 
-#include <ignition/transport/Node.hh>
-
 #include <ignition/gui/qt.h>
-#include <ignition/gui/Plugin.hh>
 
 #include <string>
+
+#include <ignition/transport/Node.hh>
+#include <ignition/gui/Plugin.hh>
 
 namespace ignition
 {

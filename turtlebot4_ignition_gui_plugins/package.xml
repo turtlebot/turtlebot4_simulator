@@ -8,7 +8,7 @@
   <license>Apache 2.0</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
-  <buildtool_depend>ignition-gui5</buildtool_depend>
+  <buildtool_depend>ignition-gui6</buildtool_depend>
   <depend>qml-module-qtquick-extras</depend>
 
   <test_depend>ament_lint_auto</test_depend>

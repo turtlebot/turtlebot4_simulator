@@ -20,11 +20,12 @@
 
 #include <ignition/msgs/int32.pb.h>
 
+#include <iostream>
+#include <vector>
+
 #include <ignition/plugin/Register.hh>
 #include <ignition/gui/Application.hh>
 #include <ignition/gui/MainWindow.hh>
-
-#include <iostream>
 
 using ignition::gui::Turtlebot4Hmi;
 
