@@ -1,62 +1,63 @@
-turtlebot4_node:
-  ros__parameters:
-    wifi:
-      interface: "wlan0"
-      
-      # Supported Functions:
-      # Dock
-      # Undock
-      # Wall Follow Left
-      # Wall Follow Right
-      # Power
-      # EStop
+/**:
+  turtlebot4_node:
+    ros__parameters:
+      wifi:
+        interface: "wlan0"
+        
+        # Supported Functions:
+        # Dock
+        # Undock
+        # Wall Follow Left
+        # Wall Follow Right
+        # Power
+        # EStop
 
-      # Menu Functions:
-      # Scroll Up
-      # Scroll Down
-      # Back
-      # Select
-      # Help
+        # Menu Functions:
+        # Scroll Up
+        # Scroll Down
+        # Back
+        # Select
+        # Help
 
+        # Buttons:
+        # create3_1
+        # create3_power
+        # create3_2
+        # hmi_1
+        # hmi_2
+        # hmi_3
+        # hmi_4
+
+        # Format:
+        # button: ["SHORT_PRESS_FUNC", "LONG_PRESS_FUNC", "LONG_PRESS_DURATION_MS"]
+
+      buttons:  
+        create3_1: ["Dock", "Wall Follow Left", "2000"]
+        create3_power: ["EStop", "Power", "3000"]
+        create3_2: ["Undock", "Wall Follow Right", "2000"]
+
+        hmi_1: ["Select"]
+        hmi_2: ["Back"]
+        hmi_3: ["Scroll Up"]
+        hmi_4: ["Scroll Down"]
+
+        # Menu entry must match a function
+      menu:
+        entries: ["Dock", "Undock", "EStop", "Wall Follow Left", "Wall Follow Right", "Power", "Help"]
+
+      # Controller button functions
       # Buttons:
-      # create3_1
-      # create3_power
-      # create3_2
-      # hmi_1
-      # hmi_2
-      # hmi_3
-      # hmi_4
+      # a b x y
+      # up down left right
+      # l1 l2 l3 r1 r2 r3
+      # share options home
 
-      # Format:
-      # button: ["SHORT_PRESS_FUNC", "LONG_PRESS_FUNC", "LONG_PRESS_DURATION_MS"]
-
-    buttons:  
-      create3_1: ["Dock", "Wall Follow Left", "2000"]
-      create3_power: ["EStop", "Power", "3000"]
-      create3_2: ["Undock", "Wall Follow Right", "2000"]
-
-      hmi_1: ["Select"]
-      hmi_2: ["Back"]
-      hmi_3: ["Scroll Up"]
-      hmi_4: ["Scroll Down"]
-
-      # Menu entry must match a function
-    menu:
-      entries: ["Dock", "Undock", "EStop", "Wall Follow Left", "Wall Follow Right", "Power", "Help"]
-
-    # Controller button functions
-    # Buttons:
-    # a b x y
-    # up down left right
-    # l1 l2 l3 r1 r2 r3
-    # share options home
-
-    controller:
-      b: ["EStop"]
-      a: ["Select"]
-      x: ["Back"]
-      up: ["Scroll Up"]
-      down: ["Scroll Down"]
-      l2: ["Wall Follow Left"]
-      r2: ["Wall Follow Right"]
-      home: ["Dock", "Undock", "3000"]
+      controller:
+        b: ["EStop"]
+        a: ["Select"]
+        x: ["Back"]
+        up: ["Scroll Up"]
+        down: ["Scroll Down"]
+        l2: ["Wall Follow Left"]
+        r2: ["Wall Follow Right"]
+        home: ["Dock", "Undock", "3000"]

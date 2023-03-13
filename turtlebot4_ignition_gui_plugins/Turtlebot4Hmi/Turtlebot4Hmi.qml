@@ -31,7 +31,7 @@ Rectangle
   anchors.fill: parent
   focus: true
   Layout.minimumWidth: 400
-  Layout.minimumHeight: 525
+  Layout.minimumHeight: 575
 
   Connections {
       target: Turtlebot4Hmi
@@ -74,26 +74,55 @@ Rectangle
 
   Rectangle
   {
-    id: create3ButtonsRectangle
+    id: namespaceRectangle
     border.color: "black"
     border.width: 2
     anchors.top: widgetRectangle.top
     anchors.left: widgetRectangle.left
     focus: true
+    height: 75
+    width: 400
+    // Robot namespace input
+    Label {
+      id: namespaceLabel
+      text: "Namespace:"
+      Layout.fillWidth: true
+      Layout.margins: 10
+      anchors.top: namespaceRectangle.top
+      anchors.topMargin: 10
+      anchors.left: namespaceRectangle.left
+      anchors.leftMargin: 10
+    }
+
+    TextField {
+      id: nameField
+      width: 175
+      Layout.fillWidth: true
+      Layout.margins: 10
+      text: Turtlebot4Hmi.namespace
+      placeholderText: qsTr("Robot namespace")
+      anchors.top: namespaceLabel.bottom
+      anchors.topMargin: 5
+      anchors.left: namespaceRectangle.left
+      anchors.leftMargin: 10
+      onEditingFinished: {
+        Turtlebot4Hmi.SetNamespace(text)
+      }
+    }
+  }
+
+  Rectangle
+  {
+    id: create3ButtonsRectangle
+    border.color: "black"
+    border.width: 2
+    anchors.top: namespaceRectangle.bottom
+    anchors.left: namespaceRectangle.left
+    focus: true
     height: 125
     width: 400
 
     // Buttons
-    Label {
-      id: create3ButtonsLabel
-      text: "Create3"
-      font.pixelSize: 22
-      anchors.top: create3ButtonsRectangle.top
-      anchors.topMargin: 10
-      anchors.left: parent.left
-      anchors.leftMargin: 10
-    }
-
     ToolButton {
       id: create3Button1
       anchors.verticalCenter: create3ButtonPower.verticalCenter
@@ -115,8 +144,8 @@ Rectangle
 
     ToolButton {
       id: create3ButtonPower
-      anchors.top: create3ButtonsLabel.bottom
-      anchors.topMargin: 0
+      anchors.bottom: create3ButtonsRectangle.bottom
+      anchors.bottomMargin: 15
       anchors.horizontalCenter: create3ButtonsRectangle.horizontalCenter
       checkable: true
       checked: true
@@ -156,7 +185,7 @@ Rectangle
   Rectangle
   {
     id: hmiRectangle
-    height: 350
+    height: 325
     width: 400
     color: "transparent"
     border.color: "black"
@@ -164,19 +193,9 @@ Rectangle
     anchors.top: create3ButtonsRectangle.bottom
     anchors.left: create3ButtonsRectangle.left
 
-    Label {
-      id: hmiLabel
-      text: "Turtlebot4 HMI"
-      font.pixelSize: 22
-      anchors.top: hmiRectangle.top
-      anchors.topMargin: 10
-      anchors.left: hmiRectangle.left
-      anchors.leftMargin: 10
-    }
-
     StatusIndicator {
       id: ledPower
-      anchors.top: hmiLabel.bottom
+      anchors.top: hmiRectangle.top
       anchors.topMargin: 10
       anchors.right: ledMotors.left
       anchors.rightMargin: 35
@@ -195,7 +214,7 @@ Rectangle
 
     StatusIndicator {
       id: ledMotors
-      anchors.top: hmiLabel.bottom
+      anchors.top: hmiRectangle.top
       anchors.topMargin: 10
       anchors.right: ledComms.left
       anchors.rightMargin: 35
@@ -214,7 +233,7 @@ Rectangle
 
     StatusIndicator {
       id: ledComms
-      anchors.top: hmiLabel.bottom
+      anchors.top: hmiRectangle.top
       anchors.topMargin: 10
       anchors.horizontalCenter: hmiRectangle.horizontalCenter
       color: "green"
@@ -232,7 +251,7 @@ Rectangle
 
     StatusIndicator {
       id: ledWifi
-      anchors.top: hmiLabel.bottom
+      anchors.top: hmiRectangle.top
       anchors.topMargin: 10
       anchors.left: ledComms.right
       anchors.leftMargin: 35
@@ -251,7 +270,7 @@ Rectangle
 
     StatusIndicator {
       id: ledBattery
-      anchors.top: hmiLabel.bottom
+      anchors.top: hmiRectangle.top
       anchors.topMargin: 10
       anchors.left: ledWifi.right
       anchors.leftMargin: 35

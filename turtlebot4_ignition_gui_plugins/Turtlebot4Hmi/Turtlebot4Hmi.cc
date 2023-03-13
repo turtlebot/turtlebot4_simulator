@@ -33,11 +33,25 @@ Turtlebot4Hmi::Turtlebot4Hmi()
 : Plugin()
 {
   App()->Engine()->rootContext()->setContextProperty("DisplayListView", &this->display_list_);
+  CreatePublishers();
+  CreateSubscribers();
+}
+
+Turtlebot4Hmi::~Turtlebot4Hmi()
+{
+}
+
+void Turtlebot4Hmi::CreatePublishers()
+{
   this->hmi_button_pub_ = ignition::transport::Node::Publisher();
   this->hmi_button_pub_ = this->node_.Advertise < ignition::msgs::Int32 > (this->hmi_button_topic_);
   this->create3_button_pub_ = ignition::transport::Node::Publisher();
   this->create3_button_pub_ = this->node_.Advertise < ignition::msgs::Int32 > (
     this->create3_button_topic_);
+}
+
+void Turtlebot4Hmi::CreateSubscribers()
+{
   this->node_.Subscribe(this->display_topic_, &Turtlebot4Hmi::OnRawMessage, this);
   this->node_.Subscribe(this->display_selected_topic_, &Turtlebot4Hmi::OnSelectedMessage, this);
   this->node_.Subscribe(this->power_led_topic_, &Turtlebot4Hmi::OnPowerLedMessage, this);
@@ -49,8 +63,23 @@ Turtlebot4Hmi::Turtlebot4Hmi()
   this->node_.Subscribe(this->user2_led_topic_, &Turtlebot4Hmi::OnUser2LedMessage, this);
 }
 
-Turtlebot4Hmi::~Turtlebot4Hmi()
+void Turtlebot4Hmi::RemovePublishers()
 {
+  this->node_.UnadvertiseSrv(this->hmi_button_topic_);
+  this->node_.UnadvertiseSrv(this->create3_button_topic_);
+}
+
+void Turtlebot4Hmi::RemoveSubscribers()
+{
+  this->node_.Unsubscribe(this->display_topic_);
+  this->node_.Unsubscribe(this->display_selected_topic_);
+  this->node_.Unsubscribe(this->power_led_topic_);
+  this->node_.Unsubscribe(this->motors_led_topic_);
+  this->node_.Unsubscribe(this->comms_led_topic_);
+  this->node_.Unsubscribe(this->wifi_led_topic_);
+  this->node_.Unsubscribe(this->battery_led_topic_);
+  this->node_.Unsubscribe(this->user1_led_topic_);
+  this->node_.Unsubscribe(this->user2_led_topic_);
 }
 
 void Turtlebot4Hmi::LoadConfig(const tinyxml2::XMLElement * _pluginElem)
@@ -63,9 +92,50 @@ void Turtlebot4Hmi::LoadConfig(const tinyxml2::XMLElement * _pluginElem)
     this->title = "Turtlebot4 HMI";
   }
 
+  auto namespaceElem = _pluginElem->FirstChildElement("namespace");
+  if (nullptr != namespaceElem && nullptr != namespaceElem->GetText())
+  {
+    this->SetNamespace(namespaceElem->GetText());
+  }
+
   this->connect(
     this, SIGNAL(AddMsg(QString)), this, SLOT(OnAddMsg(QString)),
     Qt::QueuedConnection);
+}
+
+QString Turtlebot4Hmi::Namespace() const
+{
+  return QString::fromStdString(this->namespace_);
+}
+
+void Turtlebot4Hmi::SetNamespace(const QString &_name)
+{
+  this->namespace_ = _name.toStdString();
+  
+  ignmsg << "A new robot namespace has been entered: '" <<
+      this->namespace_ << " ' " <<std::endl;
+
+  // Remove existing pub/subs
+  RemovePublishers();
+  RemoveSubscribers();
+
+  // Update topic names
+  this->create3_button_topic_ = this->namespace_ + "/create3_buttons";
+  this->hmi_button_topic_ = this->namespace_ + "/hmi/buttons";
+  this->display_topic_ = this->namespace_ + "/hmi/display/raw";
+  this->display_selected_topic_ = this->namespace_ + "/hmi/display/selected";
+  this->power_led_topic_ = this->namespace_ + "/hmi/led/power";
+  this->motors_led_topic_ = this->namespace_ + "/hmi/led/motors";
+  this->comms_led_topic_ = this->namespace_ + "/hmi/led/comms";
+  this->wifi_led_topic_ = this->namespace_ + "/hmi/led/wifi";
+  this->battery_led_topic_ = this->namespace_ + "/hmi/led/battery";
+  this->user1_led_topic_ = this->namespace_ + "/hmi/led/user1";
+  this->user2_led_topic_ = this->namespace_ + "/hmi/led/user2";
+
+  // Recreate publishers and subscribers with new topics.
+  CreatePublishers();
+  CreateSubscribers();
+  this->NamespaceChanged();
 }
 
 void Turtlebot4Hmi::OnHmiButton(const int button)
