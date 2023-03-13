@@ -1,4 +1,4 @@
-# Copyright 2023 Clearpath Robotics, Inc.
+# Copyright 2021 Clearpath Robotics, Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -44,6 +44,10 @@ ARGUMENTS = [
                           description='Robot namespace')
 ]
 
+for pose_element in ['x', 'y', 'z', 'yaw']:
+    ARGUMENTS.append(DeclareLaunchArgument(pose_element, default_value='0.0',
+                     description=f'{pose_element} component of the robot pose.'))
+
 
 def generate_launch_description():
 
@@ -84,6 +88,7 @@ def generate_launch_description():
 
     # Launch configurations
     namespace = LaunchConfiguration('namespace')
+    use_sim_time = LaunchConfiguration('use_sim_time')
     x, y, z = LaunchConfiguration('x'), LaunchConfiguration('y'), LaunchConfiguration('z')
     yaw = LaunchConfiguration('yaw')
     turtlebot4_node_yaml_file = LaunchConfiguration('param_file')
@@ -202,7 +207,9 @@ def generate_launch_description():
     # RViz
     rviz = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([rviz_launch]),
-        launch_arguments=[('namespace', namespace)],
+        launch_arguments=[
+            ('namespace', namespace),
+            ('use_sim_time', use_sim_time)],
         condition=IfCondition(LaunchConfiguration('rviz')),
     )
 
