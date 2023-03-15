@@ -24,8 +24,6 @@ from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 
 
 ARGUMENTS = [
-    DeclareLaunchArgument('robot_name', default_value='turtlebot4',
-                          description='Robot name'),
     DeclareLaunchArgument('namespace', default_value='',
                           description='Robot namespace'),
     DeclareLaunchArgument('rviz', default_value='true',
@@ -63,7 +61,6 @@ def generate_launch_description():
     robot_spawn = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([robot_spawn_launch]),
         launch_arguments=[
-            ('robot_name', LaunchConfiguration('robot_name')),
             ('namespace', LaunchConfiguration('namespace')),
             ('rviz', LaunchConfiguration('rviz')),
             ('x', LaunchConfiguration('x')),

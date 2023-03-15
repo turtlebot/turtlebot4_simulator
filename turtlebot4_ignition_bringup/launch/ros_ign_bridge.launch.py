@@ -30,8 +30,10 @@ ARGUMENTS = [
                           choices=['true', 'false'],
                           description='Use sim time'),
     DeclareLaunchArgument('robot_name', default_value='turtlebot4',
-                          description='Robot name'),
-    DeclareLaunchArgument('namespace', default_value=LaunchConfiguration('robot_name'),
+                          description='Ignition model name'),
+    DeclareLaunchArgument('dock_name', default_value='standard_dock',
+                          description='Ignition model name'),
+    DeclareLaunchArgument('namespace', default_value='',
                           description='Robot namespace'),
     DeclareLaunchArgument('world', default_value='depot',
                           description='World name'),
@@ -42,6 +44,12 @@ ARGUMENTS = [
 
 
 def generate_launch_description():
+    use_sim_time = LaunchConfiguration('use_sim_time')
+    robot_name = LaunchConfiguration('robot_name')
+    dock_name = LaunchConfiguration('dock_name')
+    namespace = LaunchConfiguration('namespace')
+    world = LaunchConfiguration('world')
+
     leds = [
         'power',
         'motors',
@@ -51,11 +59,6 @@ def generate_launch_description():
         'user1',
         'user2'
     ]
-
-    robot_name = LaunchConfiguration('robot_name')
-    namespace = LaunchConfiguration('namespace')
-    world = LaunchConfiguration('world')
-    use_sim_time = LaunchConfiguration('use_sim_time')
 
     pkg_irobot_create_ignition_bringup = get_package_share_directory(
         'irobot_create_ignition_bringup')
@@ -67,6 +70,7 @@ def generate_launch_description():
         PythonLaunchDescriptionSource([create3_ros_gz_bridge_launch]),
         launch_arguments=[
             ('robot_name', robot_name),
+            ('dock_name', dock_name),
             ('namespace', namespace),
             ('world', world)
         ]
@@ -184,23 +188,19 @@ def generate_launch_description():
             ],
         remappings=[
             (['/world/', world,
-              '/model/',
-              robot_name,
+              '/model/', robot_name,
               '/link/oakd_rgb_camera_frame/sensor/rgbd_camera/image'],
              'oakd/rgb/preview/image_raw'),
             (['/world/', world,
-              '/model/',
-              robot_name,
+              '/model/', robot_name,
               '/link/oakd_rgb_camera_frame/sensor/rgbd_camera/depth_image'],
              'oakd/rgb/preview/depth'),
             (['/world/', world,
-              '/model/',
-              robot_name,
+              '/model/', robot_name,
               '/link/oakd_rgb_camera_frame/sensor/rgbd_camera/points'],
              'oakd/rgb/preview/depth/points'),
             (['/world/', world,
-              '/model/',
-              robot_name,
+              '/model/', robot_name,
               '/link/oakd_rgb_camera_frame/sensor/rgbd_camera/camera_info'],
              'oakd/rgb/preview/camera_info')
             ]

@@ -18,6 +18,7 @@
 from ament_index_python.packages import get_package_share_directory
 
 from irobot_create_common_bringup.offset import OffsetParser, RotationalOffsetX, RotationalOffsetY
+from irobot_create_common_bringup.namespace import GetNamespacedName
 
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, GroupAction, IncludeLaunchDescription
@@ -38,9 +39,7 @@ ARGUMENTS = [
     DeclareLaunchArgument('model', default_value='standard',
                           choices=['standard', 'lite'],
                           description='Turtlebot4 Model'),
-    DeclareLaunchArgument('robot_name', default_value='turtlebot4',
-                          description='Robot name'),
-    DeclareLaunchArgument('namespace', default_value=LaunchConfiguration('robot_name'),
+    DeclareLaunchArgument('namespace', default_value='',
                           description='Robot namespace')
 ]
 
@@ -93,6 +92,9 @@ def generate_launch_description():
     yaw = LaunchConfiguration('yaw')
     turtlebot4_node_yaml_file = LaunchConfiguration('param_file')
 
+    robot_name = GetNamespacedName(namespace, 'turtlebot4')
+    dock_name = GetNamespacedName(namespace, 'standard_dock')
+
     # Calculate dock offset due to yaw rotation
     dock_offset_x = RotationalOffsetX(0.157, yaw)
     dock_offset_y = RotationalOffsetY(0.157, yaw)
@@ -109,8 +111,7 @@ def generate_launch_description():
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource([robot_description_launch]),
             launch_arguments=[('model', LaunchConfiguration('model')),
-                              ('use_sim_time', LaunchConfiguration('use_sim_time')),
-                              ('robot_name', LaunchConfiguration('robot_name'))]
+                              ('use_sim_time', LaunchConfiguration('use_sim_time'))]
         ),
 
         # Dock description
@@ -124,7 +125,7 @@ def generate_launch_description():
         Node(
             package='ros_ign_gazebo',
             executable='create',
-            arguments=['-name', LaunchConfiguration('robot_name'),
+            arguments=['-name', robot_name,
                        '-x', x,
                        '-y', y,
                        '-z', z,
@@ -137,7 +138,7 @@ def generate_launch_description():
         Node(
             package='ros_ign_gazebo',
             executable='create',
-            arguments=['-name', [LaunchConfiguration('robot_name'), '/standard_dock'],
+            arguments=['-name', dock_name,
                        '-x', x_dock,
                        '-y', y_dock,
                        '-z', z,
@@ -149,7 +150,11 @@ def generate_launch_description():
         # ROS IGN bridge
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource([turtlebot4_ros_ign_bridge_launch]),
-            launch_arguments=[('model', LaunchConfiguration('model'))]
+            launch_arguments=[
+                ('model', LaunchConfiguration('model')),
+                ('robot_name', robot_name),
+                ('dock_name', dock_name),
+                ('namespace', namespace)]
         ),
 
         # TurtleBot 4 nodes
@@ -161,12 +166,19 @@ def generate_launch_description():
 
         # Create 3 nodes
         IncludeLaunchDescription(
-            PythonLaunchDescriptionSource([create3_nodes_launch])
+            PythonLaunchDescriptionSource([create3_nodes_launch]),
+            launch_arguments=[
+                ('namespace', namespace)
+            ]
         ),
 
         # Create 3 Ignition nodes
         IncludeLaunchDescription(
-            PythonLaunchDescriptionSource([create3_ignition_nodes_launch])
+            PythonLaunchDescriptionSource([create3_ignition_nodes_launch]),
+            launch_arguments=[
+                ('robot_name', robot_name),
+                ('dock_name', dock_name),
+            ]
         ),
 
         # RPLIDAR static transforms
@@ -177,7 +189,7 @@ def generate_launch_description():
             output='screen',
             arguments=[
                 '0', '0', '0', '0', '0', '0.0',
-                'rplidar_link', [LaunchConfiguration('robot_name'), '/rplidar_link/rplidar']],
+                'rplidar_link', [robot_name, '/rplidar_link/rplidar']],
             remappings=[
                 ('/tf', 'tf'),
                 ('/tf_static', 'tf_static'),
@@ -195,7 +207,7 @@ def generate_launch_description():
                 '0', '0', '0',
                 '1.5707', '-1.5707' ,'0',
                 'oakd_rgb_camera_optical_frame',
-                [LaunchConfiguration('robot_name'), '/oakd_rgb_camera_frame/rgbd_camera']
+                [robot_name, '/oakd_rgb_camera_frame/rgbd_camera']
             ],
             remappings=[
                 ('/tf', 'tf'),
