@@ -34,6 +34,9 @@ ARGUMENTS = [
                           description='use_sim_time'),
     DeclareLaunchArgument('world', default_value='warehouse',
                           description='Ignition World'),
+    DeclareLaunchArgument('model', default_value='lite',
+                          choices=['standard', 'lite'],
+                          description='Turtlebot4 Model'),
 ]
 
 
