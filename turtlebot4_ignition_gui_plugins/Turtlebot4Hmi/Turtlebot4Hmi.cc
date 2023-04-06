@@ -111,7 +111,7 @@ QString Turtlebot4Hmi::Namespace() const
 void Turtlebot4Hmi::SetNamespace(const QString &_name)
 {
   this->namespace_ = _name.toStdString();
-  
+
   ignmsg << "A new robot namespace has been entered: '" <<
       this->namespace_ << " ' " <<std::endl;
 
