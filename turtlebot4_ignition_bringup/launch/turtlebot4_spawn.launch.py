@@ -17,8 +17,8 @@
 
 from ament_index_python.packages import get_package_share_directory
 
-from irobot_create_common_bringup.offset import OffsetParser, RotationalOffsetX, RotationalOffsetY
 from irobot_create_common_bringup.namespace import GetNamespacedName
+from irobot_create_common_bringup.offset import OffsetParser, RotationalOffsetX, RotationalOffsetY
 
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, GroupAction, IncludeLaunchDescription
@@ -205,7 +205,7 @@ def generate_launch_description():
             output='screen',
             arguments=[
                 '0', '0', '0',
-                '1.5707', '-1.5707' ,'0',
+                '1.5707', '-1.5707', '0',
                 'oakd_rgb_camera_optical_frame',
                 [robot_name, '/oakd_rgb_camera_frame/rgbd_camera']
             ],
