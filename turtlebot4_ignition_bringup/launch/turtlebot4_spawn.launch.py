@@ -30,7 +30,7 @@ from launch_ros.actions import Node, PushRosNamespace
 
 
 ARGUMENTS = [
-    DeclareLaunchArgument('rviz', default_value='true',
+    DeclareLaunchArgument('rviz', default_value='false',
                           choices=['true', 'false'],
                           description='Start rviz.'),
     DeclareLaunchArgument('use_sim_time', default_value='true',
@@ -40,7 +40,16 @@ ARGUMENTS = [
                           choices=['standard', 'lite'],
                           description='Turtlebot4 Model'),
     DeclareLaunchArgument('namespace', default_value='',
-                          description='Robot namespace')
+                          description='Robot namespace'),
+    DeclareLaunchArgument('localization', default_value='false',
+                          choices=['true', 'false'],
+                          description='Whether to launch localization'),
+    DeclareLaunchArgument('slam', default_value='false',
+                          choices=['true', 'false'],
+                          description='Whether to launch SLAM'),
+    DeclareLaunchArgument('nav2', default_value='false',
+                          choices=['true', 'false'],
+                          description='Whether to launch Nav2'),
 ]
 
 for pose_element in ['x', 'y', 'z', 'yaw']:
@@ -57,6 +66,8 @@ def generate_launch_description():
         'turtlebot4_description')
     pkg_turtlebot4_viz = get_package_share_directory(
         'turtlebot4_viz')
+    pkg_turtlebot4_navigation = get_package_share_directory(
+        'turtlebot4_navigation')
     pkg_irobot_create_common_bringup = get_package_share_directory(
         'irobot_create_common_bringup')
     pkg_irobot_create_ignition_bringup = get_package_share_directory(
@@ -66,7 +77,7 @@ def generate_launch_description():
     turtlebot4_ros_ign_bridge_launch = PathJoinSubstitution(
         [pkg_turtlebot4_ignition_bringup, 'launch', 'ros_ign_bridge.launch.py'])
     rviz_launch = PathJoinSubstitution(
-        [pkg_turtlebot4_viz, 'launch', 'view_model.launch.py'])
+        [pkg_turtlebot4_viz, 'launch', 'view_robot.launch.py'])
     turtlebot4_node_launch = PathJoinSubstitution(
         [pkg_turtlebot4_ignition_bringup, 'launch', 'turtlebot4_nodes.launch.py'])
     create3_nodes_launch = PathJoinSubstitution(
@@ -77,6 +88,12 @@ def generate_launch_description():
         [pkg_turtlebot4_description, 'launch', 'robot_description.launch.py'])
     dock_description_launch = PathJoinSubstitution(
         [pkg_irobot_create_common_bringup, 'launch', 'dock_description.launch.py'])
+    localization_launch = PathJoinSubstitution(
+        [pkg_turtlebot4_navigation, 'launch', 'localization.launch.py'])
+    slam_launch = PathJoinSubstitution(
+        [pkg_turtlebot4_navigation, 'launch', 'slam.launch.py'])
+    nav2_launch = PathJoinSubstitution(
+        [pkg_turtlebot4_navigation, 'launch', 'nav2.launch.py'])
 
     # Parameters
     param_file_cmd = DeclareLaunchArgument(
@@ -91,6 +108,9 @@ def generate_launch_description():
     x, y, z = LaunchConfiguration('x'), LaunchConfiguration('y'), LaunchConfiguration('z')
     yaw = LaunchConfiguration('yaw')
     turtlebot4_node_yaml_file = LaunchConfiguration('param_file')
+    localization = LaunchConfiguration('localization')
+    slam = LaunchConfiguration('slam')
+    nav2 = LaunchConfiguration('nav2')
 
     robot_name = GetNamespacedName(namespace, 'turtlebot4')
     dock_name = GetNamespacedName(namespace, 'standard_dock')
@@ -213,7 +233,37 @@ def generate_launch_description():
                 ('/tf', 'tf'),
                 ('/tf_static', 'tf_static'),
             ]
-        )
+        ),
+
+        # Localization
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource([localization_launch]),
+            launch_arguments=[
+                ('namespace', namespace),
+                ('use_sim_time', use_sim_time)
+            ],
+            condition=IfCondition(localization)
+        ),
+
+        # SLAM
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource([slam_launch]),
+            launch_arguments=[
+                ('namespace', namespace),
+                ('use_sim_time', use_sim_time)
+            ],
+            condition=IfCondition(slam)
+        ),
+
+        # Nav2
+        IncludeLaunchDescription(
+            PythonLaunchDescriptionSource([nav2_launch]),
+            launch_arguments=[
+                ('namespace', namespace),
+                ('use_sim_time', use_sim_time)
+            ],
+            condition=IfCondition(nav2)
+        ),
     ])
 
     # RViz
