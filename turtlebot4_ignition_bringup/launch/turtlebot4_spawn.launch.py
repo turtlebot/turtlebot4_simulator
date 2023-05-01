@@ -121,6 +121,9 @@ def generate_launch_description():
     # Spawn dock at robot position + rotational offset
     x_dock = OffsetParser(x, dock_offset_x)
     y_dock = OffsetParser(y, dock_offset_y)
+    # Spawn robot slightly clsoer to the floor to reduce the drop
+    # Ensures robot remains properly docked after the drop
+    z_robot = OffsetParser(z, -0.0025)
     # Rotate dock towards robot
     yaw_dock = OffsetParser(yaw, 3.1416)
 
@@ -148,7 +151,7 @@ def generate_launch_description():
             arguments=['-name', robot_name,
                        '-x', x,
                        '-y', y,
-                       '-z', z,
+                       '-z', z_robot,
                        '-Y', yaw,
                        '-topic', 'robot_description'],
             output='screen'
