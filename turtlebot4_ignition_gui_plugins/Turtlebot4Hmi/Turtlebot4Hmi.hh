@@ -36,6 +36,14 @@ class Turtlebot4Hmi : public Plugin
 {
   Q_OBJECT
 
+  // \brief Namespace
+  Q_PROPERTY(
+    QString name
+    READ Namespace
+    WRITE SetNamespace
+    NOTIFY NamespaceChanged
+  )
+
 public:
   /// \brief Constructor
   Turtlebot4Hmi();
@@ -44,6 +52,16 @@ public:
   /// \brief Called by Ignition GUI when plugin is instantiated.
   /// \param[in] _pluginElem XML configuration for this plugin.
   void LoadConfig(const tinyxml2::XMLElement * _pluginElem) override;
+  // \brief Get the robot namespace as a string, for example
+  /// '/robot1'
+  /// \return Namespace
+  Q_INVOKABLE QString Namespace() const;
+
+public slots:
+  /// \brief Callback in Qt thread when the robot namespace changes.
+  /// \param[in] _name variable to indicate the robot namespace to
+  /// publish the Button commands.
+  void SetNamespace(const QString &_name);
 
 protected slots:
   /// \brief Callback trigged when the button is pressed.
@@ -59,6 +77,8 @@ signals:
   void setBatteryState(const bool state, const QString color);
   void setUser1State(const bool state, const QString color);
   void setUser2State(const bool state, const QString color);
+  /// \brief Notify that robot namespace has changed
+  void NamespaceChanged();
 
   /// \brief Subscriber callbacks
 private:
@@ -71,6 +91,10 @@ private:
   void OnBatteryLedMessage(const ignition::msgs::Int32 & msg);
   void OnUser1LedMessage(const ignition::msgs::Int32 & msg);
   void OnUser2LedMessage(const ignition::msgs::Int32 & msg);
+  void CreatePublishers();
+  void CreateSubscribers();
+  void RemovePublishers();
+  void RemoveSubscribers();
 
 signals:
   void AddMsg(QString msg);
@@ -83,17 +107,18 @@ private:
   ignition::transport::Node::Publisher hmi_button_pub_;
   ignition::transport::Node::Publisher create3_button_pub_;
 
-  std::string hmi_button_topic_ = "/model/turtlebot4/hmi/buttons";
-  std::string create3_button_topic_ = "/create3/buttons";
-  std::string display_topic_ = "/model/turtlebot4/hmi/display/raw";
-  std::string display_selected_topic_ = "/model/turtlebot4/hmi/display/selected";
-  std::string power_led_topic_ = "/model/turtlebot4/hmi/led/power";
-  std::string motors_led_topic_ = "/model/turtlebot4/hmi/led/motors";
-  std::string comms_led_topic_ = "/model/turtlebot4/hmi/led/comms";
-  std::string wifi_led_topic_ = "/model/turtlebot4/hmi/led/wifi";
-  std::string battery_led_topic_ = "/model/turtlebot4/hmi/led/battery";
-  std::string user1_led_topic_ = "/model/turtlebot4/hmi/led/user1";
-  std::string user2_led_topic_ = "/model/turtlebot4/hmi/led/user2";
+  std::string namespace_ = "";
+  std::string hmi_button_topic_ = "/hmi/buttons";
+  std::string create3_button_topic_ = "/create3_buttons";
+  std::string display_topic_ = "/hmi/display/raw";
+  std::string display_selected_topic_ = "/hmi/display/selected";
+  std::string power_led_topic_ = "/hmi/led/power";
+  std::string motors_led_topic_ = "/hmi/led/motors";
+  std::string comms_led_topic_ = "/hmi/led/comms";
+  std::string wifi_led_topic_ = "/hmi/led/wifi";
+  std::string battery_led_topic_ = "/hmi/led/battery";
+  std::string user1_led_topic_ = "/hmi/led/user1";
+  std::string user2_led_topic_ = "/hmi/led/user2";
 
   QStringListModel display_list_;
 
