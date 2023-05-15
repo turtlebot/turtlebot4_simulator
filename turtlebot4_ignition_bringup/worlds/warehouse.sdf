@@ -9,7 +9,6 @@
     <plugin name='ignition::gazebo::systems::UserCommands' filename='libignition-gazebo-user-commands-system.so'/>
     <plugin name='ignition::gazebo::systems::SceneBroadcaster' filename='libignition-gazebo-scene-broadcaster-system.so'/>
 
-
     <scene>
       <ambient>1 1 1 1</ambient>
       <background>0.3 0.7 0.9 1</background>
@@ -17,13 +16,14 @@
       <grid>false</grid>
     </scene>
 
-    <light type="directional" name="sun">
+    <!-- TODO(rkreinin): Fix lighting so that spawning multiple robots does not crash the sim-->
+    <!-- <light type="directional" name="sun">
       <cast_shadows>0</cast_shadows>
       <pose>-5 -3 10 0 0 0</pose>
       <diffuse>1 1 1 1</diffuse>
       <specular>1 1 1 1</specular>
       <direction>0 0 -1</direction>
-    </light>
+    </light> -->
 
     <model name='ground_plane'>
       <static>true</static>
