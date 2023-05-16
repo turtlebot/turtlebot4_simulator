@@ -2,8 +2,8 @@
 Changelog for package turtlebot4_ignition_bringup
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.0.0 (2023-05-16)
+------------------
 * Multiple robot support
 * Spawn robot slightly lower to reduce the drop and rollback, ensuring the robot starts properly docked
 * Add default model type for HMI plugin

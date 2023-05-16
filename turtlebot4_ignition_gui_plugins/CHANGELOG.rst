@@ -2,8 +2,8 @@
 Changelog for package turtlebot4_ignition_gui_plugins
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.0.0 (2023-05-16)
+------------------
 * Updated GUI to have namespace input
 * Contributors: Hilary Luo, Roni Kreinin, roni-kreinin
 
