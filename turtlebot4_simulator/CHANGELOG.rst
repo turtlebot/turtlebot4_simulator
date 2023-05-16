@@ -2,6 +2,9 @@
 Changelog for package turtlebot4_simulator
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+
 0.1.1 (2022-05-09)
 ------------------
 
