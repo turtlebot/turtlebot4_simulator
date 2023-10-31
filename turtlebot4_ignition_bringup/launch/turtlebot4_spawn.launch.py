@@ -108,9 +108,6 @@ def generate_launch_description():
     x, y, z = LaunchConfiguration('x'), LaunchConfiguration('y'), LaunchConfiguration('z')
     yaw = LaunchConfiguration('yaw')
     turtlebot4_node_yaml_file = LaunchConfiguration('param_file')
-    localization = LaunchConfiguration('localization')
-    slam = LaunchConfiguration('slam')
-    nav2 = LaunchConfiguration('nav2')
 
     robot_name = GetNamespacedName(namespace, 'turtlebot4')
     dock_name = GetNamespacedName(namespace, 'standard_dock')
@@ -238,36 +235,37 @@ def generate_launch_description():
             ]
         ),
 
-        # Localization
-        IncludeLaunchDescription(
-            PythonLaunchDescriptionSource([localization_launch]),
-            launch_arguments=[
-                ('namespace', namespace),
-                ('use_sim_time', use_sim_time)
-            ],
-            condition=IfCondition(localization)
-        ),
-
-        # SLAM
-        IncludeLaunchDescription(
-            PythonLaunchDescriptionSource([slam_launch]),
-            launch_arguments=[
-                ('namespace', namespace),
-                ('use_sim_time', use_sim_time)
-            ],
-            condition=IfCondition(slam)
-        ),
-
-        # Nav2
-        IncludeLaunchDescription(
-            PythonLaunchDescriptionSource([nav2_launch]),
-            launch_arguments=[
-                ('namespace', namespace),
-                ('use_sim_time', use_sim_time)
-            ],
-            condition=IfCondition(nav2)
-        ),
     ])
+
+    # Localization
+    localization = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([localization_launch]),
+        launch_arguments=[
+            ('namespace', namespace),
+            ('use_sim_time', use_sim_time)
+        ],
+        condition=IfCondition(LaunchConfiguration('localization'))
+    )
+
+    # SLAM
+    slam = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([slam_launch]),
+        launch_arguments=[
+            ('namespace', namespace),
+            ('use_sim_time', use_sim_time)
+        ],
+        condition=IfCondition(LaunchConfiguration('slam'))
+    )
+
+    # Nav2
+    nav2 = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([nav2_launch]),
+        launch_arguments=[
+            ('namespace', namespace),
+            ('use_sim_time', use_sim_time)
+        ],
+        condition=IfCondition(LaunchConfiguration('nav2'))
+    )
 
     # RViz
     rviz = IncludeLaunchDescription(
@@ -282,5 +280,8 @@ def generate_launch_description():
     ld = LaunchDescription(ARGUMENTS)
     ld.add_action(param_file_cmd)
     ld.add_action(spawn_robot_group_action)
+    ld.add_action(localization)
+    ld.add_action(slam)
+    ld.add_action(nav2)
     ld.add_action(rviz)
     return ld
