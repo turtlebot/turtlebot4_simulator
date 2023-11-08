@@ -2,6 +2,14 @@
 Changelog for package turtlebot4_ignition_bringup
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Merge pull request <https://github.com/turtlebot/turtlebot4_simulator/issues/57>
+* Merge pull request <https://github.com/turtlebot/turtlebot4_simulator/issues/58>
+* Remove outdated world
+* Don't push namespace to nav, it is handled in the nav launch files
+* Contributors: Hilary Luo
+
 1.0.0 (2023-05-16)
 ------------------
 * Multiple robot support
