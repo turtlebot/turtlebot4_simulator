@@ -1,0 +1,16 @@
+name: Troubleshooting Help
+description: "If you need troubleshooting help please use the troubleshooting form from the Turtlebot4 repo: https://github.com/turtlebot/turtlebot4/issues/new/choose."
+labels: ["troubleshooting"]
+assignees:
+  - smatar22
+  - RustyCPR
+body:
+  - type: markdown
+    attributes:
+      value: "If you need troubleshooting help please use the troubleshooting form here: https://github.com/turtlebot/turtlebot4/issues/new/choose."
+  - type: dropdown
+    id: value
+    attributes:
+      label: Understand?
+      options:
+        - 'Yes'
