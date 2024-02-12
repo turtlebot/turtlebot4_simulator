@@ -2,7 +2,7 @@ name: Troubleshooting Help
 description: "If you need troubleshooting help please use the troubleshooting form from the Turtlebot4 repo: https://github.com/turtlebot/turtlebot4/issues/new/choose."
 labels: ["troubleshooting"]
 assignees:
-  - smatar22
+  - smatarCPR
   - RustyCPR
 body:
   - type: markdown
