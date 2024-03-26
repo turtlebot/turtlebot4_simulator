@@ -14,7 +14,7 @@
 
     <include>
       <uri>
-        https://fuel.ignitionrobotics.org/1.0/OpenRobotics/models/Depot
+        https://fuel.gazebosim.org/1.0/OpenRobotics/models/Depot
       </uri>
     </include>
 
