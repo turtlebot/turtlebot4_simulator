@@ -43,7 +43,7 @@
     <!-- Base -->
     <include>
       <uri>
-        https://fuel.ignitionrobotics.org/1.0/OpenRobotics/models/Warehouse
+        https://fuel.gazebosim.org/1.0/OpenRobotics/models/Warehouse
       </uri>
       <name>warehouse</name>
       <pose>0 0 -0.1 0 0 0</pose>
@@ -52,7 +52,7 @@
     <!-- Pallet Box Mobile -->
     <include>
       <uri>
-        https://fuel.ignitionrobotics.org/1.0/MovAi/models/pallet_box_mobile
+        https://fuel.gazebosim.org/1.0/MovAi/models/pallet_box_mobile
       </uri>
       <name>pallet_box_0</name>
       <pose>-4 12 0.01 0 0 0</pose>
@@ -62,56 +62,56 @@
     <!-- Shelves -->
     <include>
       <uri>
-        https://fuel.ignitionrobotics.org/1.0/MovAi/models/shelf_big
+        https://fuel.gazebosim.org/1.0/MovAi/models/shelf_big
       </uri>
       <name>shelf_big_0</name>
       <pose>-8.5 -13 0 0 -0 0</pose>
     </include>
     <include>
       <uri>
-        https://fuel.ignitionrobotics.org/1.0/MovAi/models/shelf_big
+        https://fuel.gazebosim.org/1.0/MovAi/models/shelf_big
       </uri>
       <name>shelf_big_1</name>
       <pose>6.5 -13 0 0 -0 0</pose>
     </include>
     <include>
       <uri>
-        https://fuel.ignitionrobotics.org/1.0/MovAi/models/shelf_big
+        https://fuel.gazebosim.org/1.0/MovAi/models/shelf_big
       </uri>
       <name>shelf_big_2</name>
       <pose>-1.5 -13 0 0 -0 0</pose>
     </include>
     <include>
       <uri>
-        https://fuel.ignitionrobotics.org/1.0/MovAi/models/shelf
+        https://fuel.gazebosim.org/1.0/MovAi/models/shelf
       </uri>
       <name>shelf_3</name>
       <pose>13.5 4.5 0 0 -0 0</pose>
     </include>
     <include>
       <uri>
-        https://fuel.ignitionrobotics.org/1.0/MovAi/models/shelf
+        https://fuel.gazebosim.org/1.0/MovAi/models/shelf
       </uri>
       <name>shelf_4</name>
       <pose>10 4.5 0 0 -0 0</pose>
     </include>
     <include>
       <uri>
-        https://fuel.ignitionrobotics.org/1.0/MovAi/models/shelf
+        https://fuel.gazebosim.org/1.0/MovAi/models/shelf
       </uri>
       <name>shelf_5</name>
       <pose>13.5 -21 0 0 -0 0</pose>
     </include>
     <include>
       <uri>
-        https://fuel.ignitionrobotics.org/1.0/MovAi/models/shelf
+        https://fuel.gazebosim.org/1.0/MovAi/models/shelf
       </uri>
       <name>shelf_6</name>
       <pose>13.5 -15 0 0 -0 0</pose>
     </include>
     <include>
       <uri>
-        https://fuel.ignitionrobotics.org/1.0/MovAi/models/shelf
+        https://fuel.gazebosim.org/1.0/MovAi/models/shelf
       </uri>
       <name>shelf_7</name>
       <pose>0.4 -2 0 0 -0 0</pose>
@@ -121,35 +121,35 @@
 
     <include>
       <uri>
-        https://fuel.ignitionrobotics.org/1.0/MovAi/models/shelf_big
+        https://fuel.gazebosim.org/1.0/MovAi/models/shelf_big
       </uri>
       <name>shelf_big_3</name>
       <pose>3.5 9.5 0 0 0 1.57</pose>
     </include>
     <include>
       <uri>
-        https://fuel.ignitionrobotics.org/1.0/MovAi/models/shelf_big
+        https://fuel.gazebosim.org/1.0/MovAi/models/shelf_big
       </uri>
       <name>shelf_big_4</name>
       <pose>-1.3 18.5 0 0 0 1.57</pose>
     </include>
     <include>
       <uri>
-        https://fuel.ignitionrobotics.org/1.0/MovAi/models/shelf
+        https://fuel.gazebosim.org/1.0/MovAi/models/shelf
       </uri>
       <name>shelf_0</name>
       <pose>-10 21.5 0 0 -0 1.57</pose>
     </include>
     <include>
       <uri>
-        https://fuel.ignitionrobotics.org/1.0/MovAi/models/shelf
+        https://fuel.gazebosim.org/1.0/MovAi/models/shelf
       </uri>
       <name>shelf_1</name>
       <pose>-7 23.6 0 0 -0 1.57</pose>
     </include>
     <include>
       <uri>
-        https://fuel.ignitionrobotics.org/1.0/MovAi/models/shelf
+        https://fuel.gazebosim.org/1.0/MovAi/models/shelf
       </uri>
       <name>shelf_2</name>
       <pose>-4 21.5 0 0 -0 1.57</pose>
@@ -190,28 +190,28 @@
 
     <include>
       <uri>
-        https://fuel.ignitionrobotics.org/1.0/OpenRobotics/models/Chair
+        https://fuel.gazebosim.org/1.0/OpenRobotics/models/Chair
       </uri>
       <name>chair_0</name>
       <pose>14.3 -5.5 0 0 -0 3</pose>
     </include>
     <include>
       <uri>
-        https://fuel.ignitionrobotics.org/1.0/OpenRobotics/models/Chair
+        https://fuel.gazebosim.org/1.0/OpenRobotics/models/Chair
       </uri>
       <name>chair_1</name>
       <pose>14.3 -4 0 0 -0 -3</pose>
     </include>
     <include>
       <uri>
-        https://fuel.ignitionrobotics.org/1.0/OpenRobotics/models/foldable_chair
+        https://fuel.gazebosim.org/1.0/OpenRobotics/models/foldable_chair
       </uri>
       <name>fchair_0</name>
       <pose>-11.5 6.4 0 0 -0 -1.8</pose>
     </include>
     <include>
       <uri>
-        https://fuel.ignitionrobotics.org/1.0/OpenRobotics/models/foldable_chair
+        https://fuel.gazebosim.org/1.0/OpenRobotics/models/foldable_chair
       </uri>
       <name>fchair1</name>
       <pose>-14 6.5 0 0 -0 1.9</pose>
@@ -221,7 +221,7 @@
 
     <include>
       <uri>
-        https://fuel.ignitionrobotics.org/1.0/OpenRobotics/models/Table
+        https://fuel.gazebosim.org/1.0/OpenRobotics/models/Table
       </uri>
       <name>table0</name>
       <pose>-12.7 6.5 0 0 0 0</pose>
