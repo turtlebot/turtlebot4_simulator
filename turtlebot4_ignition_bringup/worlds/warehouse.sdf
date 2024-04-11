@@ -50,6 +50,7 @@
     </include>
 
     <!-- Pallet Box Mobile -->
+    <!--
     <include>
       <uri>
         https://fuel.gazebosim.org/1.0/MovAi/models/pallet_box_mobile
@@ -57,7 +58,7 @@
       <name>pallet_box_0</name>
       <pose>-4 12 0.01 0 0 0</pose>
       <static>true</static>
-    </include>
+    </include> -->
 
     <!-- Shelves -->
     <include>
@@ -229,13 +230,14 @@
 
     <!-- People -->
 
+    <!--
     <include>
       <uri>
       https://fuel.gazebosim.org/1.0/OpenRobotics/models/Rescue Randy Sitting
       </uri>
       <name>Person 0 - Sitting</name>
       <pose>14.65 -10 0 0 0 -1.57</pose>
-    </include> 
+    </include> -->
 
     <include>
       <uri>
