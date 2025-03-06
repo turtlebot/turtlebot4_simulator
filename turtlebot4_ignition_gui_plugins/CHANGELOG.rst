@@ -2,6 +2,9 @@
 Changelog for package turtlebot4_ignition_gui_plugins
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+
 1.0.2 (2024-04-15)
 ------------------
 
