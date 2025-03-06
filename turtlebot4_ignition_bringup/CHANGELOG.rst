@@ -2,8 +2,8 @@
 Changelog for package turtlebot4_ignition_bringup
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.0.3 (2025-03-06)
+------------------
 * Merge pull request `#83 <https://github.com/turtlebot/turtlebot4_simulator/issues/83>`_ from fdila/humble
   Start simulation when launching Ignition
 * Contributors: Federica Di Lauro, Katherine Scott
